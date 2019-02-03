@@ -2,6 +2,7 @@
     "name": "unigen/unigen",
     "type": "library",
     "description": "UniGen is a unit test generator for PHP. It automatically generates unit tests for your classes ",
+    "license": "MIT",
     "authors": [
         {
             "name": "Kamil Kujawa",
