@@ -1,8 +1,8 @@
 <?php
 
-namespace UnitGen\Renderer;
+namespace UniGen\Renderer;
 
-use UnitGen\Sut\SutInterface;
+use UniGen\Sut\SutInterface;
 
 interface RendererInterface
 {

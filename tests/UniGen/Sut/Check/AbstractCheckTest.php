@@ -1,12 +1,12 @@
 <?php
 
-namespace UnitGen\Test\Sut\Check;
+namespace UniGen\Test\Sut\Check;
 
 use Mockery;
 use Mockery\MockInterface;
-use UnitGen\Sut\SutInterface;
+use UniGen\Sut\SutInterface;
 use PHPUnit\Framework\TestCase;
-use UnitGen\Sut\Check\AbstractCheck;
+use UniGen\Sut\Check\AbstractCheck;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 class AbstractCheckTest extends TestCase

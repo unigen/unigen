@@ -1,24 +1,24 @@
 <?php
 
-namespace UnitGen\Test\Renderer;
+namespace UniGen\Test\Renderer;
 
 use Twig_Environment;
-use UnitGen\Config;
+use UniGen\Config;
 use Mockery;
 use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
-use UnitGen\Renderer\ContentDecoratorInterface;
-use UnitGen\Renderer\TwigRenderer;
-use UnitGen\Sut\SutInterface;
+use UniGen\Renderer\ContentDecoratorInterface;
+use UniGen\Renderer\TwigRenderer;
+use UniGen\Sut\SutInterface;
 
 class TwigRendererTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    private const TEMPLATE = 'template';
-    private const CONTENT = 'content';
-    private const CONTENT_DECORATED = 'decoratedContent';
+    const TEMPLATE = 'template';
+    const CONTENT = 'content';
+    const CONTENT_DECORATED = 'decoratedContent';
 
     /** @var string|MockInterface */
     private $template;

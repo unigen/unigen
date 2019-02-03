@@ -1,9 +1,9 @@
 <?php
 
-namespace UnitGen\Test\Util;
+namespace UniGen\Test\Util;
 
 use PHPUnit\Framework\TestCase;
-use UnitGen\Util\ClassNameResolver;
+use UniGen\Util\ClassNameResolver;
 
 class ClassNameResolverTest extends TestCase
 {

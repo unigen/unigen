@@ -1,20 +1,20 @@
 <?php
 
-namespace UnitGen\Test;
+namespace UniGen\Test;
 
 use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
-use UnitGen\Config;
+use UniGen\Config;
 
 class ConfigTest extends TestCase
 {
-    private const MOCK_FRAMEWORK = 'framework';
-    private const PARENT_TEST_CLASS = 'parent';
-    private const TEST_PATH_PATTERN = 'pathPattern';
-    private const NAMESPACE_PATTERN = 'namespacePattern';
-    private const TEST_PATH_REPLACEMENT_PATTERN = 'pathReplacementPattern';
-    private const NAMESPACE_REPLACEMENT_PATTERN = 'namespaceReplacementPattern';
+    const MOCK_FRAMEWORK = 'framework';
+    const PARENT_TEST_CLASS = 'parent';
+    const TEST_PATH_PATTERN = 'pathPattern';
+    const NAMESPACE_PATTERN = 'namespacePattern';
+    const TEST_PATH_REPLACEMENT_PATTERN = 'pathReplacementPattern';
+    const NAMESPACE_REPLACEMENT_PATTERN = 'namespaceReplacementPattern';
 
     use MockeryPHPUnitIntegration;
 

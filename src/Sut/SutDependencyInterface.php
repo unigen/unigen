@@ -1,6 +1,6 @@
 <?php
 
-namespace UnitGen\Sut;
+namespace UniGen\Sut;
 
 interface SutDependencyInterface
 {

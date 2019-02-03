@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace UnitGen\Sut\Check;
+namespace UniGen\Sut\Check;
 
-use UnitGen\Sut\SutCheckInterface;
-use UnitGen\Sut\SutInterface;
+use UniGen\Sut\SutCheckInterface;
+use UniGen\Sut\SutInterface;
 
 class AbstractCheck implements SutCheckInterface
 {

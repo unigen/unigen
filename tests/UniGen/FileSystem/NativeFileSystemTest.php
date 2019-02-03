@@ -1,12 +1,12 @@
 <?php
 
-namespace UnitGen\Test\FileSystem;
+namespace UniGen\Test\FileSystem;
 
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
-use UnitGen\FileSystem\Exception\FileSystemException;
-use UnitGen\FileSystem\NativeFileSystem;
+use UniGen\FileSystem\Exception\FileSystemException;
+use UniGen\FileSystem\NativeFileSystem;
 
 class NativeFileSystemTest extends TestCase
 {

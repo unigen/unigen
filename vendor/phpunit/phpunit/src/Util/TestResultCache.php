@@ -24,7 +24,7 @@ class TestResultCache implements \Serializable, TestResultCacheInterface
      *
      * @var array<string, string>
      */
-    private const ALLOWED_CACHE_TEST_STATUSES = [
+    const ALLOWED_CACHE_TEST_STATUSES = [
         BaseTestRunner::STATUS_SKIPPED,
         BaseTestRunner::STATUS_INCOMPLETE,
         BaseTestRunner::STATUS_FAILURE,

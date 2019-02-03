@@ -1,13 +1,13 @@
 <?php
 
-namespace UnitGen\Test\Sut\Adapter;
+namespace UniGen\Test\Sut\Adapter;
 
 use ReflectionParameter;
 use Mockery;
 use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
-use UnitGen\Sut\Adapter\ReflectionSutDependencyAdapter;
+use UniGen\Sut\Adapter\ReflectionSutDependencyAdapter;
 
 class ReflectionSutDependencyAdapterTest extends TestCase
 {

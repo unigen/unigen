@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UnitGen\Sut;
+namespace UniGen\Sut;
 
 interface SutCheckInterface
 {

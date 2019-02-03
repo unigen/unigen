@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace UnitGen\Util;
+namespace UniGen\Util;
 
 class ClassNameResolver
 {
-    private const NAMESPACE_SEPARATOR = '\\';
-    private const CLASS_PATTERN = '/class\s(\w+)/';
-    private const NAMESPACE_PATTERN = '/namespace\s(.+);/';
+    const NAMESPACE_SEPARATOR = '\\';
+    const CLASS_PATTERN = '/class\s(\w+)/';
+    const NAMESPACE_PATTERN = '/namespace\s(.+);/';
 
     /**
      * @param string $content

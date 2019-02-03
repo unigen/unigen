@@ -1,22 +1,22 @@
 <?php
 
-namespace UnitGen\Test\Sut\Provider;
+namespace UniGen\Test\Sut\Provider;
 
-use UnitGen\Sut\Adapter\ReflectionSutAdapter;
-use UnitGen\Sut\Exception\SutValidatorException;
-use UnitGen\Sut\SutInterface;
-use UnitGen\Sut\SutValidator;
+use UniGen\Sut\Adapter\ReflectionSutAdapter;
+use UniGen\Sut\Exception\SutValidatorException;
+use UniGen\Sut\SutInterface;
+use UniGen\Sut\SutValidator;
 use Mockery;
 use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
-use UnitGen\Sut\Provider\ReflectionSutProvider;
+use UniGen\Sut\Provider\ReflectionSutProvider;
 
 class ReflectionSutProviderTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    private const SUT_CLASS = 'stdClass';
+    const SUT_CLASS = 'stdClass';
 
     /** @var SutValidator|MockInterface */
     private $validator;

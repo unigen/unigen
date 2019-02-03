@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace UnitGen\Sut\Provider;
+namespace UniGen\Sut\Provider;
 
 use ReflectionClass;
-use UnitGen\Sut\SutInterface;
-use UnitGen\Sut\SutValidator;
-use UnitGen\Sut\SutProviderInterface;
-use UnitGen\Sut\Adapter\ReflectionSutAdapter;
+use UniGen\Sut\SutInterface;
+use UniGen\Sut\SutValidator;
+use UniGen\Sut\SutProviderInterface;
+use UniGen\Sut\Adapter\ReflectionSutAdapter;
 
 class ReflectionSutProvider implements SutProviderInterface
 {

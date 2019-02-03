@@ -45,7 +45,7 @@ class ResultPrinter extends Printer implements TestListener
 
     public const COLOR_DEFAULT = self::COLOR_NEVER;
 
-    private const AVAILABLE_COLORS = [self::COLOR_NEVER, self::COLOR_AUTO, self::COLOR_ALWAYS];
+    const AVAILABLE_COLORS = [self::COLOR_NEVER, self::COLOR_AUTO, self::COLOR_ALWAYS];
 
     /**
      * @var array

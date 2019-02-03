@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace UnitGen;
+namespace UniGen;
 
-use UnitGen\Sut\SutInterface;
+use UniGen\Sut\SutInterface;
 use InvalidArgumentException;
-use UnitGen\Util\ClassNameResolver;
-use UnitGen\Sut\SutProviderInterface;
-use UnitGen\Renderer\RendererInterface;
-use UnitGen\FileSystem\FileSystemInterface;
+use UniGen\Util\ClassNameResolver;
+use UniGen\Sut\SutProviderInterface;
+use UniGen\Renderer\RendererInterface;
+use UniGen\FileSystem\FileSystemInterface;
 
 class TestGenerator
 {

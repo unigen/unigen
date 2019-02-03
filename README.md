@@ -3,11 +3,11 @@ UniGen is a unit test generator for PHP. It automatically generates unit tests f
 
 ### Installation
 
-`composer require --dev unitgen/unitgen`
+`composer require --dev unigen/unigen`
 
 ### Integrations
 
-Symfony bundle unitgen/unitgen-bundle
+Symfony bundle unigen/unigen-bundle
 
 ### Configuration
 

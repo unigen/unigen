@@ -1,13 +1,13 @@
 <?php
 
-namespace UnitGen\Test\Renderer\Decorator;
+namespace UniGen\Test\Renderer\Decorator;
 
-use UnitGen\Config;
+use UniGen\Config;
 use Mockery;
 use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
-use UnitGen\Renderer\Decorator\NamespaceDecorator;
+use UniGen\Renderer\Decorator\NamespaceDecorator;
 
 class NamespaceDecoratorTest extends TestCase
 {

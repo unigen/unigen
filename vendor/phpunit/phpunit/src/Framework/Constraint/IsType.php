@@ -44,7 +44,7 @@ class IsType extends Constraint
     /**
      * @var array
      */
-    private const KNOWN_TYPES = [
+    const KNOWN_TYPES = [
         'array'    => true,
         'boolean'  => true,
         'bool'     => true,

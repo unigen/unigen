@@ -20,11 +20,11 @@ class TestSuiteSorterTest extends TestCase
     /**
      * Constants to improve clarity of @dataprovider
      */
-    private const IGNORE_DEPENDENCIES  = false;
+    const IGNORE_DEPENDENCIES  = false;
 
-    private const RESOLVE_DEPENDENCIES = true;
+    const RESOLVE_DEPENDENCIES = true;
 
-    private const MULTIDEPENDENCYTEST_EXECUTION_ORDER = [
+    const MULTIDEPENDENCYTEST_EXECUTION_ORDER = [
         \MultiDependencyTest::class . '::testOne',
         \MultiDependencyTest::class . '::testTwo',
         \MultiDependencyTest::class . '::testThree',

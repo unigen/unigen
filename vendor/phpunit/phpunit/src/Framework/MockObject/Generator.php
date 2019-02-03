@@ -29,7 +29,7 @@ class Generator
     /**
      * @var array
      */
-    private const BLACKLISTED_METHOD_NAMES = [
+    const BLACKLISTED_METHOD_NAMES = [
         '__CLASS__'       => true,
         '__DIR__'         => true,
         '__FILE__'        => true,

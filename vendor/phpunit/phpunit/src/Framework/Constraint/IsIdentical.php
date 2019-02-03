@@ -28,7 +28,7 @@ class IsIdentical extends Constraint
     /**
      * @var float
      */
-    private const EPSILON = 0.0000000001;
+    const EPSILON = 0.0000000001;
 
     /**
      * @var mixed

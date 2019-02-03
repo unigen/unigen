@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UnitGen\Sut\Exception;
+namespace UniGen\Sut\Exception;
 
 class SutValidatorException extends \RuntimeException
 {

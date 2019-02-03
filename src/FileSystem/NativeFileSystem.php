@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace UnitGen\FileSystem;
+namespace UniGen\FileSystem;
 
-use UnitGen\FileSystem\Exception\FileSystemException;
+use UniGen\FileSystem\Exception\FileSystemException;
 
 class NativeFileSystem implements FileSystemInterface
 {
-    private const DEFAULT_FILE_PERMISSION = 0755;
+    const DEFAULT_FILE_PERMISSION = 0755;
 
     /**
      * {@inheritdoc}

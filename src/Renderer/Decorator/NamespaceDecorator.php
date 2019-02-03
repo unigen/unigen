@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace UnitGen\Renderer\Decorator;
+namespace UniGen\Renderer\Decorator;
 
-use UnitGen\Config;
-use UnitGen\Renderer\ContentDecoratorInterface;
+use UniGen\Config;
+use UniGen\Renderer\ContentDecoratorInterface;
 
 class NamespaceDecorator implements ContentDecoratorInterface
 {

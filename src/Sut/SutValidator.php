@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace UnitGen\Sut;
+namespace UniGen\Sut;
 
-use UnitGen\Sut\Exception\SutValidatorException;
+use UniGen\Sut\Exception\SutValidatorException;
 
 class SutValidator
 {

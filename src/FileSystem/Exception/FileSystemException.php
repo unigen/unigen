@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UnitGen\FileSystem\Exception;
+namespace UniGen\FileSystem\Exception;
 
 class FileSystemException extends \RuntimeException
 {

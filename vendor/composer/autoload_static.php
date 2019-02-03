@@ -23,7 +23,7 @@ class ComposerStaticInitc369eb409b8e880c55ec7458123c780d
         ),
         'U' => 
         array (
-            'UnitGen\\' => 8,
+            'UniGen\\' => 7,
         ),
         'T' => 
         array (
@@ -52,7 +52,7 @@ class ComposerStaticInitc369eb409b8e880c55ec7458123c780d
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
         ),
-        'UnitGen\\' => 
+        'UniGen\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),

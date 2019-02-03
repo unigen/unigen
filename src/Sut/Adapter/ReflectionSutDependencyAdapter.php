@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace UnitGen\Sut\Adapter;
+namespace UniGen\Sut\Adapter;
 
 use ReflectionParameter;
-use UnitGen\Util\ScalarValueResolver;
-use UnitGen\Sut\SutDependencyInterface;
+use UniGen\Util\ScalarValueResolver;
+use UniGen\Sut\SutDependencyInterface;
 
 class ReflectionSutDependencyAdapter implements SutDependencyInterface
 {

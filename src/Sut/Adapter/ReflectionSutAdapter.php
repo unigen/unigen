@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace UnitGen\Sut\Adapter;
+namespace UniGen\Sut\Adapter;
 
 use ReflectionClass;
 use ReflectionMethod;
-use UnitGen\Sut\SutInterface;
+use UniGen\Sut\SutInterface;
 
 class ReflectionSutAdapter implements SutInterface
 {

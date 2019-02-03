@@ -1,14 +1,14 @@
 <?php
 
-namespace UnitGen\Test\Sut;
+namespace UniGen\Test\Sut;
 
 use Mockery;
 use Mockery\MockInterface;
-use UnitGen\Sut\SutInterface;
-use UnitGen\Sut\SutValidator;
+use UniGen\Sut\SutInterface;
+use UniGen\Sut\SutValidator;
 use PHPUnit\Framework\TestCase;
-use UnitGen\Sut\SutCheckInterface;
-use UnitGen\Sut\Exception\SutValidatorException;
+use UniGen\Sut\SutCheckInterface;
+use UniGen\Sut\Exception\SutValidatorException;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 class SutValidatorTest extends TestCase

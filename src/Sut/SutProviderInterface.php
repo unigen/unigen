@@ -1,8 +1,8 @@
 <?php
 
-namespace UnitGen\Sut;
+namespace UniGen\Sut;
 
-use UnitGen\Sut\Exception\SutValidatorException;
+use UniGen\Sut\Exception\SutValidatorException;
 
 interface SutProviderInterface
 {

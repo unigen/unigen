@@ -1,6 +1,6 @@
 <?php
 
-namespace UnitGen\Renderer;
+namespace UniGen\Renderer;
 
 interface ContentDecoratorInterface
 {

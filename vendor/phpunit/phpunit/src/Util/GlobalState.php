@@ -16,7 +16,7 @@ final class GlobalState
     /**
      * @var string[]
      */
-    private const SUPER_GLOBAL_ARRAYS = [
+    const SUPER_GLOBAL_ARRAYS = [
         '_ENV',
         '_POST',
         '_GET',

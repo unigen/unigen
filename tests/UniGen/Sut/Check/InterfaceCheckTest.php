@@ -1,12 +1,12 @@
 <?php
 
-namespace UnitGen\Test\Sut\Check;
+namespace UniGen\Test\Sut\Check;
 
 use Mockery;
 use Mockery\MockInterface;
-use UnitGen\Sut\SutInterface;
+use UniGen\Sut\SutInterface;
 use PHPUnit\Framework\TestCase;
-use UnitGen\Sut\Check\InterfaceCheck;
+use UniGen\Sut\Check\InterfaceCheck;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 class InterfaceCheckTest extends TestCase

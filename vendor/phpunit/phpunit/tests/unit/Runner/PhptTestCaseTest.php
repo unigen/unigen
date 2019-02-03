@@ -14,7 +14,7 @@ use PHPUnit\Util\PHP\AbstractPhpProcess;
 
 class PhptTestCaseTest extends TestCase
 {
-    private const EXPECT_CONTENT = <<<EOF
+    const EXPECT_CONTENT = <<<EOF
 --TEST--
 EXPECT test
 --FILE--
@@ -23,7 +23,7 @@ EXPECT test
 Hello PHPUnit!
 EOF;
 
-    private const EXPECTF_CONTENT = <<<EOF
+    const EXPECTF_CONTENT = <<<EOF
 --TEST--
 EXPECTF test
 --FILE--
@@ -32,7 +32,7 @@ EXPECTF test
 Hello %s!
 EOF;
 
-    private const EXPECTREGEX_CONTENT = <<<EOF
+    const EXPECTREGEX_CONTENT = <<<EOF
 --TEST--
 EXPECTREGEX test
 --FILE--
@@ -41,7 +41,7 @@ EXPECTREGEX test
 Hello [HPU]{4}[nit]{3}!
 EOF;
 
-    private const FILE_SECTION = <<<EOF
+    const FILE_SECTION = <<<EOF
 <?php echo "Hello PHPUnit!"; ?>
 
 EOF;

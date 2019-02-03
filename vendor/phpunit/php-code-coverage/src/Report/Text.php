@@ -23,32 +23,32 @@ final class Text
     /**
      * @var string
      */
-    private const COLOR_GREEN = "\x1b[30;42m";
+    const COLOR_GREEN = "\x1b[30;42m";
 
     /**
      * @var string
      */
-    private const COLOR_YELLOW = "\x1b[30;43m";
+    const COLOR_YELLOW = "\x1b[30;43m";
 
     /**
      * @var string
      */
-    private const COLOR_RED = "\x1b[37;41m";
+    const COLOR_RED = "\x1b[37;41m";
 
     /**
      * @var string
      */
-    private const COLOR_HEADER = "\x1b[1;37;40m";
+    const COLOR_HEADER = "\x1b[1;37;40m";
 
     /**
      * @var string
      */
-    private const COLOR_RESET = "\x1b[0m";
+    const COLOR_RESET = "\x1b[0m";
 
     /**
      * @var string
      */
-    private const COLOR_EOL = "\x1b[2K";
+    const COLOR_EOL = "\x1b[2K";
 
     /**
      * @var int

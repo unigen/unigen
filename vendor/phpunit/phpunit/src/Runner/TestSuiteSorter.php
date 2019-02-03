@@ -44,7 +44,7 @@ final class TestSuiteSorter
     /**
      * List of sorting weights for all test result codes. A higher number gives higher priority.
      */
-    private const DEFECT_SORT_WEIGHT = [
+    const DEFECT_SORT_WEIGHT = [
         BaseTestRunner::STATUS_ERROR      => 6,
         BaseTestRunner::STATUS_FAILURE    => 5,
         BaseTestRunner::STATUS_WARNING    => 4,

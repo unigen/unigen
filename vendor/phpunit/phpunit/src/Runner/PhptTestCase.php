@@ -29,7 +29,7 @@ class PhptTestCase implements Test, SelfDescribing
     /**
      * @var string[]
      */
-    private const SETTINGS = [
+    const SETTINGS = [
         'allow_url_fopen=1',
         'auto_append_file=',
         'auto_prepend_file=',

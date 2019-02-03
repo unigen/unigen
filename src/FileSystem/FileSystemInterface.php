@@ -1,8 +1,8 @@
 <?php
 
-namespace UnitGen\FileSystem;
+namespace UniGen\FileSystem;
 
-use UnitGen\FileSystem\Exception\FileSystemException;
+use UniGen\FileSystem\Exception\FileSystemException;
 
 interface FileSystemInterface
 {

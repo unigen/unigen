@@ -1,22 +1,22 @@
 <?php
 
-namespace UnitGen\Test\Sut\Adapter;
+namespace UniGen\Test\Sut\Adapter;
 
 use Mockery;
 use ReflectionClass;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
-use UnitGen\Sut\Adapter\ReflectionSutAdapter;
+use UniGen\Sut\Adapter\ReflectionSutAdapter;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use UnitGen\Sut\Adapter\ReflectionSutDependencyAdapter;
-use UnitGen\Sut\SutDependencyInterface;
+use UniGen\Sut\Adapter\ReflectionSutDependencyAdapter;
+use UniGen\Sut\SutDependencyInterface;
 
 class ReflectionSutAdapterTest extends TestCase
 {
-    private const SUT_NAME = 'sutName';
-    private const SUT_FILE_PATH = '/file/path';
-    private const SUT_NAMESPACE = 'sutNamespace';
-    private const SUT_SHORT_NAME = 'sutShortName';
+    const SUT_NAME = 'sutName';
+    const SUT_FILE_PATH = '/file/path';
+    const SUT_NAMESPACE = 'sutNamespace';
+    const SUT_SHORT_NAME = 'sutShortName';
 
     use MockeryPHPUnitIntegration;
 

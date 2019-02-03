@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace UnitGen\Renderer;
+namespace UniGen\Renderer;
 
-use UnitGen\Config;
+use UniGen\Config;
 use Twig_Environment;
-use UnitGen\Sut\SutInterface;
+use UniGen\Sut\SutInterface;
 
 class TwigRenderer implements RendererInterface
 {
-    private const SUT = 'sut';
-    private const CONFIG = 'config';
+    const SUT = 'sut';
+    const CONFIG = 'config';
 
     /** @var Twig_Environment */
     private $twig;
