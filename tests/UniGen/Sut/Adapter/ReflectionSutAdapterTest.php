@@ -100,7 +100,7 @@ class ReflectionSutAdapterTest extends TestCase
 
         $result = $this->sut->getName();
 
-        $this->assertIsString($result);
+        $this->assertInternalType('string', $result);
         $this->assertSame(self::SUT_NAME, $result);
     }
 
@@ -112,7 +112,7 @@ class ReflectionSutAdapterTest extends TestCase
 
         $result = $this->sut->getShortName();
 
-        $this->assertIsString($result);
+        $this->assertInternalType('string', $result);
         $this->assertSame(self::SUT_SHORT_NAME, $result);
     }
 
@@ -142,7 +142,7 @@ class ReflectionSutAdapterTest extends TestCase
 
         $result = $this->sut->getNamespace();
 
-        $this->assertIsString($result);
+        $this->assertInternalType('string', $result);
         $this->assertEquals(self::SUT_NAMESPACE, $result);
     }
 
@@ -154,7 +154,7 @@ class ReflectionSutAdapterTest extends TestCase
 
         $result = $this->sut->getPath();
 
-        $this->assertIsString($result);
+        $this->assertInternalType('string', $result);
         $this->assertEquals(self::SUT_FILE_PATH, $result);
     }
 
@@ -192,7 +192,7 @@ class ReflectionSutAdapterTest extends TestCase
         $result = $this->sut->getDependencies();
 
         $this->assertEmpty($result);
-        $this->assertIsArray($result);
+        $this->assertInternalType('array', $result);
     }
 
     public function testGetDependenciesShouldReturnEmptyArrayWhenConstructorParametersAreNotExist()
@@ -210,7 +210,7 @@ class ReflectionSutAdapterTest extends TestCase
         $result = $this->sut->getDependencies();
 
         $this->assertEmpty($result);
-        $this->assertIsArray($result);
+        $this->assertInternalType('array', $result);
     }
 
     public function testGetDependenciesShouldReturnDependencies()
@@ -228,7 +228,7 @@ class ReflectionSutAdapterTest extends TestCase
 
         $result = $this->sut->getDependencies();
 
-        $this->assertIsArray($result);
+        $this->assertInternalType('array', $result);
         $this->assertInstanceOf(SutDependencyInterface::class, $result[0]);
         $this->assertInstanceOf(ReflectionSutDependencyAdapter::class, $result[0]);
     }
@@ -243,7 +243,7 @@ class ReflectionSutAdapterTest extends TestCase
         $result = $this->sut->getPublicMethods();
 
         $this->assertEmpty($result);
-        $this->assertIsArray($result);
+        $this->assertInternalType('array', $result);
     }
 
     public function testGetPublicMethodsShouldReturnMethodsExceptConstructor()
@@ -277,7 +277,7 @@ class ReflectionSutAdapterTest extends TestCase
 
         $result = $this->sut->getPublicMethods();
 
-        $this->assertIsArray($result);
+        $this->assertInternalType('array', $result);
         $this->assertCount(1, $result);
         $this->assertEquals('regularMethod', $result[0]);
     }

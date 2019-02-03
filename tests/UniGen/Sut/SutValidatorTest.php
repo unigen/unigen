@@ -33,8 +33,6 @@ class SutValidatorTest extends TestCase
 
     public function testValidateShouldNotThrowExceptionWhenThereIsNoChecks()
     {
-        $this->expectNotToPerformAssertions();
-
         $this->sut->validate($this->sutMock);
     }
 
