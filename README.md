@@ -9,7 +9,7 @@ UniGen is a unit test generator for PHP. It automatically generates unit tests f
 
 ### Integrations
 
-Symfony bundle unigen/unigen-bundle
+Symfony bundle [unigen/unigen-bundle](https://github.com/unigen/unigen-bundle)
 
 ### Configuration
 
