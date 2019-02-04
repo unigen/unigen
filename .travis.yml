@@ -11,10 +11,14 @@ matrix:
 branches:
   only:
     - master
-    - developcd
+    - develop
 
 before_script:
   - composer install
 
 script:
-  - vendor/bin/phpunit
+  - make unit-coverage
+
+after_script:
+- wget https://scrutinizer-ci.com/ocular.phar
+- php ocular.phar code-coverage:upload --format=php-clover coverage.xml
