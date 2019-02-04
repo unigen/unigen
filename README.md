@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/unigen/unigen.svg?branch=master)](https://travis-ci.org/unigen/unigen)
+[![Code Coverage](https://scrutinizer-ci.com/g/unigen/unigen/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/unigen/unigen/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/unigen/unigen/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/unigen/unigen/?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Minimum PHP Version](http://img.shields.io/badge/php-%3E%3D%207.0-8892BF.svg)](https://php.net/)
