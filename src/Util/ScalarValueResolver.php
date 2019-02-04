@@ -16,19 +16,14 @@ class ScalarValueResolver
         switch ($type) {
             case 'string':
                 return "'string'";
-                break;
             case 'int':
                 return '1';
-                break;
             case 'bool':
                 return 'true';
-                break;
             case 'callable':
                 return 'function () {}';
-                break;
             case 'array':
                 return '[]';
-                break;
             default:
                 return "'mixed'";
         }
