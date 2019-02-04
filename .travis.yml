@@ -11,6 +11,7 @@ matrix:
 branches:
   only:
     - master
+    - develop
 
 before_script:
   - composer install
