@@ -248,8 +248,21 @@ class ReflectionSutAdapterTest extends TestCase
 
     public function testGetPublicMethodsShouldReturnMethodsExceptConstructor()
     {
+        $declaringClass = Mockery::mock(ReflectionClass::class);
         $regularMethod = Mockery::mock(\ReflectionMethod::class);
         $constructorMethod = Mockery::mock(\ReflectionMethod::class);
+
+        $this->reflection
+            ->shouldReceive('getName')
+            ->andReturn('className');
+
+        $regularMethod
+            ->shouldReceive('getDeclaringClass')
+            ->andReturn($declaringClass);
+
+        $declaringClass
+            ->shouldReceive('getName')
+            ->andReturn('className');
 
         $regularMethod
             ->shouldReceive('isConstructor')
@@ -277,8 +290,76 @@ class ReflectionSutAdapterTest extends TestCase
 
         $result = $this->sut->getPublicMethods();
 
-        $this->assertInternalType('array', $result);
         $this->assertCount(1, $result);
+        $this->assertInternalType('array', $result);
+        $this->assertEquals('regularMethod', $result[0]);
+    }
+
+    public function testGetPublicMethodsShouldNotReturnMethodsFromParent()
+    {
+        $declaringClass = Mockery::mock(ReflectionClass::class);
+        $declaringParentClass = Mockery::mock(ReflectionClass::class);
+        $regularMethod = Mockery::mock(\ReflectionMethod::class);
+        $parentMethod = Mockery::mock(\ReflectionMethod::class);
+        $constructorMethod = Mockery::mock(\ReflectionMethod::class);
+
+        $this->reflection
+            ->shouldReceive('getName')
+            ->andReturn('className');
+
+        $regularMethod
+            ->shouldReceive('getDeclaringClass')
+            ->andReturn($declaringClass);
+
+        $declaringClass
+            ->shouldReceive('getName')
+            ->andReturn('className');
+
+        $declaringParentClass
+            ->shouldReceive('getName')
+            ->andReturn('parentClass');
+
+        $parentMethod
+            ->shouldReceive('getDeclaringClass')
+            ->andReturn($declaringParentClass);
+
+        $parentMethod
+            ->shouldReceive('isConstructor')
+            ->andReturnFalse();
+
+        $parentMethod
+            ->shouldReceive('getName')
+            ->andReturn('regularMethod');
+
+        $regularMethod
+            ->shouldReceive('isConstructor')
+            ->andReturnFalse();
+
+        $regularMethod
+            ->shouldReceive('getName')
+            ->andReturn('regularMethod');
+
+        $constructorMethod
+            ->shouldReceive('isConstructor')
+            ->andReturnTrue();
+
+        $constructorMethod
+            ->shouldReceive('getName')
+            ->andReturn('__constructor');
+
+        $this->reflection
+            ->shouldReceive('getMethods')
+            ->with(\ReflectionMethod::IS_PUBLIC)
+            ->andReturn([
+                $parentMethod,
+                $regularMethod,
+                $constructorMethod,
+            ]);
+
+        $result = $this->sut->getPublicMethods();
+
+        $this->assertCount(1, $result);
+        $this->assertInternalType('array', $result);
         $this->assertEquals('regularMethod', $result[0]);
     }
 }
