@@ -15,4 +15,4 @@ unit:
 
 unit-coverage:
 	@echo "PHPUNIT -- UNIT COVERAGE"
-	vendor/bin/phpunit --coverage-text --coverage-clover coverage.xml
+	vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover

@@ -3,4 +3,4 @@ vendor/
 .idea
 composer.lock
 phpunit.xml
-coverage.xml
+coverage.clover

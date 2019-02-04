@@ -123,7 +123,7 @@ class ReflectionSutAdapter implements SutInterface
         $methods = [];
 
         foreach ($this->reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-            if (!$method->isConstructor()) {
+            if (!$method->isConstructor() && $method->getDeclaringClass()->getName() === $this->reflection->getName()) {
                 $methods[] = $method->getName();
             }
         }
