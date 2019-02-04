@@ -1,9 +1,9 @@
 filter:
     paths: [src/*]
-    excluded_paths: [bin/*, tests/*]
 checks:
   php:
     code_rating: true
+    duplication: true
     remove_extra_empty_lines: true
     remove_php_closing_tag: true
     remove_trailing_whitespace: true
@@ -27,7 +27,3 @@ tools:
       standard: PSR2
     filter:
       paths: ['src']
-  php_loc:
-    enabled: true
-    excluded_dirs: [vendor]
-  php_sim: false
