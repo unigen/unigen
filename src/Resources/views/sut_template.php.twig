@@ -54,17 +54,16 @@ class {{ sut.getShortName }}Test extends {{ config.parentTestCase }}
         $this->{{ dependency.getName }}{% if not loop.last %}{{ ',\n' }}{% endif %}
     {% endfor %}
 
-    );
+        );
 {% else %}
-    $this->sut = new {{ sut.getShortName }}();
+        $this->sut = new {{ sut.getShortName }}();
 {% endif %}
-}
-
+    }
 {% for method in sut.getPublicMethods %}
+
     public function test{{ method[0:1]|upper ~ method[1:] }}()
     {
-    $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
-    {% if not loop.last %}{{ '\n' }}{% endif %}
 {% endfor %}
 }
