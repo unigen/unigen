@@ -11,21 +11,23 @@ class ScalarValueResolver
      *
      * @return mixed
      */
-    public static function resolve(string $type): string
+    public static function resolve(string $type)
     {
         switch ($type) {
             case 'string':
-                return "'string'";
+                return 'string';
             case 'int':
-                return '1';
+                return 1;
             case 'bool':
-                return 'true';
+                return true;
             case 'callable':
-                return 'function () {}';
+                return function () {};
             case 'array':
-                return '[]';
+                return [];
+            case 'float':
+                return 0.0;
             default:
-                return "'mixed'";
+                return 'mixed';
         }
     }
 }

@@ -9,10 +9,10 @@ use {{ dependency.getType }};
 {% endif %}
 {% endfor %}
 {% if config.mockObjectFramework == 'phpunit' and sut.hasDependencies %}
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 {% elseif config.mockObjectFramework == 'mockery' and sut.hasDependencies %}
 use Mockery;
-use Mockery\MockInterface;
+use Mockery\MockInterface as MockObject;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 {% endif %}
 use PHPUnit\Framework\TestCase;
@@ -24,7 +24,7 @@ class {{ sut.getShortName }}Test extends {{ config.parentTestCase }}
     {{ 'use MockeryPHPUnitIntegration;\n' }}
 {% endif %}
 {% for dependency in sut.getDependencies %}
-    /** @var {{ dependency.getShortName }}|{% if config.mockObjectFramework == 'mockery' %}{{ 'MockInterface' }}{% endif %} */
+    /** @var {{ dependency.getShortName }}|{{ 'MockObject' }} */
     private ${{ dependency.getName }};
 
 {% endfor %}
@@ -41,15 +41,15 @@ class {{ sut.getShortName }}Test extends {{ config.parentTestCase }}
 {% if config.mockObjectFramework == 'phpunit' %}
         $this->{{ dependency.getName }} = $this->createMock({{ dependency.getShortName }}::class);
 {% else %}
-    $this->{{ dependency.getName }} = Mockery::mock({{ dependency.getShortName }}::class);
+        $this->{{ dependency.getName }} = Mockery::mock({{ dependency.getShortName }}::class);
 {% endif %}
 {% else %}
-    $this->{{ dependency.getName  }} = {{ dependency.getValue | raw}};
+        $this->{{ dependency.getName  }} = {{ dependency.getValue | scalar | raw }};
 {% endif %}
 {% if loop.last %}{{ '\n' }}{% endif %}
 {% endfor %}
 {% if sut.hasDependencies %}
-    $this->sut = new {{ sut.getShortName }}(
+        $this->sut = new {{ sut.getShortName }}(
     {% for dependency in sut.getDependencies %}
         $this->{{ dependency.getName }}{% if not loop.last %}{{ ',\n' }}{% endif %}
     {% endfor %}
