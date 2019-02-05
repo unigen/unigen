@@ -11,31 +11,36 @@ class ScalarValueResolverTest extends TestCase
 {
     public function testResolveShouldReturnString()
     {
-        $this->assertEquals("'string'", ScalarValueResolver::resolve('string'));
+        $this->assertEquals('string', ScalarValueResolver::resolve('string'));
     }
 
     public function testResolveShouldReturnInt()
     {
-        $this->assertEquals('1', ScalarValueResolver::resolve('int'));
+        $this->assertEquals(1, ScalarValueResolver::resolve('int'));
     }
 
     public function testResolveShouldReturnTrue()
     {
-        $this->assertEquals('true', ScalarValueResolver::resolve('bool'));
+        $this->assertEquals(true, ScalarValueResolver::resolve('bool'));
     }
 
     public function testResolveShouldReturnCallback()
     {
-        $this->assertEquals('function () {}', ScalarValueResolver::resolve('callable'));
+        $this->assertEquals(function () {}, ScalarValueResolver::resolve('callable'));
     }
 
     public function testResolveShouldReturnArray()
     {
-        $this->assertEquals('[]', ScalarValueResolver::resolve('array'));
+        $this->assertEquals([], ScalarValueResolver::resolve('array'));
     }
 
     public function testResolveShouldReturnMixedWhenTypeIsUnknown()
     {
-        $this->assertEquals("'mixed'", ScalarValueResolver::resolve('invalid'));
+        $this->assertEquals('mixed', ScalarValueResolver::resolve('invalid'));
+    }
+
+    public function testResolveShouldReturnMixedWhenTypeIsFloat()
+    {
+        $this->assertEquals(0.0, ScalarValueResolver::resolve('float'));
     }
 }

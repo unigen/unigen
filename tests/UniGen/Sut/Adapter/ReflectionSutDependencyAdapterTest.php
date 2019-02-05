@@ -88,7 +88,7 @@ class ReflectionSutDependencyAdapterTest extends TestCase
             ->shouldReceive('hasType')
             ->andReturnFalse();
 
-        $this->assertEquals("'mixed'", $this->sut->getValue());
+        $this->assertEquals('mixed', $this->sut->getValue());
     }
 
     public function testGetTypeShouldReturnCorrectType()
