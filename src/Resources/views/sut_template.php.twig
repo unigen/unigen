@@ -25,7 +25,7 @@ class {{ sut.getShortName }}Test extends {{ config.parentTestCase }}
 {% endif %}
 {% for dependency in sut.getDependencies %}
     /** @var {{ dependency.getShortName }}|{{ 'MockObject' }} */
-    private ${{ dependency.getName }};
+    private ${{ dependency.getName }}{% if dependency.isObject %}Mock{% endif %};
 
 {% endfor %}
     /** @var {{ sut.getShortName }} */
@@ -39,9 +39,9 @@ class {{ sut.getShortName }}Test extends {{ config.parentTestCase }}
 {% for dependency in sut.getDependencies %}
 {% if dependency.isObject %}
 {% if config.mockObjectFramework == 'phpunit' %}
-        $this->{{ dependency.getName }} = $this->createMock({{ dependency.getShortName }}::class);
+        $this->{{ dependency.getName }}Mock = $this->createMock({{ dependency.getShortName }}::class);
 {% else %}
-        $this->{{ dependency.getName }} = Mockery::mock({{ dependency.getShortName }}::class);
+        $this->{{ dependency.getName }}Mock = Mockery::mock({{ dependency.getShortName }}::class);
 {% endif %}
 {% else %}
         $this->{{ dependency.getName  }} = {{ dependency.getValue | scalar | raw }};
@@ -51,7 +51,7 @@ class {{ sut.getShortName }}Test extends {{ config.parentTestCase }}
 {% if sut.hasDependencies %}
         $this->sut = new {{ sut.getShortName }}(
     {% for dependency in sut.getDependencies %}
-        $this->{{ dependency.getName }}{% if not loop.last %}{{ ',\n' }}{% endif %}
+        $this->{{ dependency.getName }}{% if dependency.isObject %}Mock{% endif %}{% if not loop.last %}{{ ',\n' }}{% endif %}
     {% endfor %}
 
         );
