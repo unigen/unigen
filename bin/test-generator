@@ -1,11 +1,10 @@
 #!/usr/bin/env php
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
-
 $possibleAutoloadPath = [
     __DIR__ . '/../autoload.php',
     __DIR__ . '/../../autoload.php',
+    __DIR__ . '/../../../autoload.php',
     __DIR__ . '/vendor/autoload.php',
     __DIR__ . '/../vendor/autoload.php'
 ];
@@ -13,9 +12,9 @@ $possibleAutoloadPath = [
 foreach ($possibleAutoloadPath as $file) {
     if (file_exists($file)) {
         require $file;
+        break;
     }
 }
-
 
 $validator = new UniGen\Sut\SutValidator();
 $fileSystem = new UniGen\FileSystem\NativeFileSystem();
