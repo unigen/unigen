@@ -84,8 +84,6 @@ class TestGeneratorCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        var_dump($this->config->get('testCase'));die;
-
         $path = $input->getArgument('path');
 
         if (!$this->fileSystem->exist($path)) {
