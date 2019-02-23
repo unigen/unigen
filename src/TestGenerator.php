@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace UniGen;
 
+use UniGen\Config\Config;
 use UniGen\Sut\SutInterface;
 use InvalidArgumentException;
 use UniGen\Util\ClassNameResolver;
@@ -83,8 +84,8 @@ class TestGenerator
     private function retrieveTestTargetPath(SutInterface $sut): string
     {
         return preg_replace(
-            $this->config->targetPathPattern(),
-            $this->config->targetPathReplacementPattern(),
+            $this->config->get('pathPattern'),
+            $this->config->get('pathPatternReplacement'),
             $sut->getPath()
         );
     }

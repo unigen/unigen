@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace UniGen\Util;
 
-use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\Extension\AbstractExtension;
 
 class ScalarValueMapperTwigFilter extends AbstractExtension
 {

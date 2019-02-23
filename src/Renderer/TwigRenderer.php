@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace UniGen\Renderer;
 
-use UniGen\Config;
 use Twig_Environment;
+use UniGen\Config\Config;
 use UniGen\Sut\SutInterface;
+use Twig\Loader\FilesystemLoader;
 
 class TwigRenderer implements RendererInterface
 {
@@ -16,9 +17,6 @@ class TwigRenderer implements RendererInterface
     /** @var Twig_Environment */
     private $twig;
 
-    /** @var string */
-    private $template;
-
     /** @var Config */
     private $config;
 
@@ -26,15 +24,13 @@ class TwigRenderer implements RendererInterface
     private $decorators = [];
 
     /**
-     * @param string           $template
      * @param Twig_Environment $twig
      * @param Config           $config
      */
-    public function __construct(string $template, Twig_Environment $twig, Config $config)
+    public function __construct(Twig_Environment $twig, Config $config)
     {
         $this->twig = $twig;
         $this->config = $config;
-        $this->template = $template;
     }
 
     /**
@@ -50,7 +46,9 @@ class TwigRenderer implements RendererInterface
      */
     public function render(SutInterface $sut): string
     {
-        $content = $this->twig->render($this->template, [
+        $this->applyTemplatePath();
+
+        $content = $this->twig->render($this->config->get('templateName'), [
             self::SUT => $sut,
             self::CONFIG => $this->config
         ]);
@@ -60,5 +58,16 @@ class TwigRenderer implements RendererInterface
         }
 
         return $content;
+    }
+
+    /**
+     * @return void
+     */
+    private function applyTemplatePath(): void
+    {
+        /** @var FilesystemLoader $loader */
+        $loader = $this->twig->getLoader();
+
+        $loader->addPath($this->config->get('templateDirPath'));
     }
 }
