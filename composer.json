@@ -9,6 +9,7 @@
             "email": "thekamilkujawa@gmail.com"
         }
     ],
+    "bin": ["bin/test-generator"],
     "keywords": [
         "unit",
         "unit testing",
