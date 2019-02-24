@@ -6,7 +6,7 @@ namespace UniGen\Config;
 
 class Config
 {
-    /** @var array[string][mixed] */
+    /** @var array */
     private $parameters;
 
     /**

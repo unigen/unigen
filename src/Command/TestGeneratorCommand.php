@@ -19,7 +19,7 @@ class TestGeneratorCommand extends Command
     const CODE_ERROR = 1;
     const CODE_SUCCESS = 0;
 
-    const NAME = 'test-generator';
+    const NAME = 'unigen:generate';
 
     /** @var Config */
     private $config;
