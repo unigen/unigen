@@ -64,8 +64,8 @@ class TestGeneratorCommand extends Command
             ->addOption('testCase', 't', InputOption::VALUE_REQUIRED)
             ->addOption('pathPattern', 'p', InputOption::VALUE_REQUIRED)
             ->addOption('mockFramework', 'f', InputOption::VALUE_REQUIRED)
-            ->addOption('templateName', 'b', InputOption::VALUE_REQUIRED)
-            ->addOption('templateDirPath', 'd', InputOption::VALUE_REQUIRED)
+            ->addOption('template', 'b', InputOption::VALUE_REQUIRED)
+            ->addOption('templateDir', 'd', InputOption::VALUE_REQUIRED)
             ->addOption('namespacePattern', 'l', InputOption::VALUE_REQUIRED)
             ->addOption('pathPatternReplacement', 'z', InputOption::VALUE_REQUIRED)
             ->addOption('namespacePatternReplacement', 'x', InputOption::VALUE_REQUIRED);
@@ -103,7 +103,7 @@ class TestGeneratorCommand extends Command
 
         $this->fileSystem->write($testPath, $this->renderer->render($sut));
 
-        $output->write("<info>Test file {$testPath} has been generated successfully</info>");
+        $output->writeln("<info>Test file {$testPath} has been generated successfully</info>");
 
         return self::CODE_SUCCESS;
     }

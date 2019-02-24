@@ -48,7 +48,7 @@ class TwigRenderer implements RendererInterface
     {
         $this->applyTemplatePath();
 
-        $content = $this->twig->render($this->config->get('templateName'), [
+        $content = $this->twig->render($this->config->get('template'), [
             self::SUT => $sut,
             self::CONFIG => $this->config
         ]);
@@ -68,6 +68,6 @@ class TwigRenderer implements RendererInterface
         /** @var FilesystemLoader $loader */
         $loader = $this->twig->getLoader();
 
-        $loader->addPath($this->config->get('templateDirPath'));
+        $loader->addPath($this->config->get('templateDir'));
     }
 }
