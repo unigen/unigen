@@ -5,7 +5,7 @@
 [![Minimum PHP Version](http://img.shields.io/badge/php-%3E%3D%207.0-8892BF.svg)](https://php.net/)
 
 ### UniGen
-UniGen is a unit test generator for PHP. It automatically generates unit tests for your classes.
+UniGen is a unit test generator for PHP. It automatically generates boilerplate for unit tests.
 
 ### Features
 
@@ -21,8 +21,8 @@ UniGen is a unit test generator for PHP. It automatically generates unit tests f
 
 ### Documentation
 
-* [Installation](src/Resources/doc/1-how-to-use.md)
-* [Configuration](src/Resources/doc/2-integration.md)
+* [How to use](src/Resources/doc/1-how-to-use.md)
+* [IDE integration](src/Resources/doc/2-integration.md)
 
 ### License
 This bundle is available under the MIT license.
