@@ -21,7 +21,8 @@ class ScalarValueResolver
             case 'bool':
                 return true;
             case 'callable':
-                return function () {};
+                return function () {
+                };
             case 'array':
                 return [];
             case 'float':

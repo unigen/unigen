@@ -74,6 +74,6 @@ class NamespaceDecoratorTest extends TestCase
         $this->expectExceptionMessage('Given namespace patterns are invalid');
         $this->expectException(\InvalidArgumentException::class);
 
-        $this->assertEquals('content', $this->sut->decorate('content'));
+        @$this->assertEquals('content', $this->sut->decorate('content'));
     }
 }

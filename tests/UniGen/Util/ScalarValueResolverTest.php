@@ -26,7 +26,8 @@ class ScalarValueResolverTest extends TestCase
 
     public function testResolveShouldReturnCallback()
     {
-        $this->assertEquals(function () {}, ScalarValueResolver::resolve('callable'));
+        $this->assertEquals(function () {
+        }, ScalarValueResolver::resolve('callable'));
     }
 
     public function testResolveShouldReturnArray()

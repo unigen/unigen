@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace UniGen\Test\Util;
 
-
 use Twig\TwigFilter;
 use PHPUnit\Framework\TestCase;
 use UniGen\Util\ScalarValueMapperTwigFilter;
@@ -65,7 +64,8 @@ class ScalarValueMapperTwigFilterTest extends TestCase
         /** @var TwigFilter $filter */
         $filter = $this->sut->getFilters()[0];
 
-        $this->assertEquals('function(){}', call_user_func($filter->getCallable(), function () {}));
+        $this->assertEquals('function(){}', call_user_func($filter->getCallable(), function () {
+        }));
     }
 
     public function testGetFilterShouldReturnEscapedNullValue()
