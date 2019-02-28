@@ -19,10 +19,8 @@ class Config
 
     /**
      * @param array $parameters
-     *
-     * @return void
      */
-    public function merge(array $parameters): void
+    public function merge(array $parameters)
     {
         $this->parameters = array_merge($this->parameters, array_filter($parameters));
     }

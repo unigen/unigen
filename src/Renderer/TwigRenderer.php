@@ -60,10 +60,7 @@ class TwigRenderer implements RendererInterface
         return $content;
     }
 
-    /**
-     * @return void
-     */
-    private function applyTemplatePath(): void
+    private function applyTemplatePath()
     {
         /** @var FilesystemLoader $loader */
         $loader = $this->twig->getLoader();
