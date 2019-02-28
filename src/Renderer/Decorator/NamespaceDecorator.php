@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace UniGen\Renderer\Decorator;
 
-use UniGen\Config;
+use UniGen\Config\Config;
 use UniGen\Renderer\ContentDecoratorInterface;
 
 class NamespaceDecorator implements ContentDecoratorInterface
@@ -25,10 +25,16 @@ class NamespaceDecorator implements ContentDecoratorInterface
      */
     public function decorate(string $content): string
     {
-        return preg_replace(
-            $this->config->namespacePattern(),
-            $this->config->namespaceReplacePattern(),
+        $content = preg_replace(
+            $this->config->get('namespacePattern'),
+            $this->config->get('namespacePatternReplacement'),
             $content
         );
+
+        if (is_null($content)) {
+            throw new \InvalidArgumentException("Given namespace patterns are invalid");
+        }
+
+        return $content;
     }
 }
