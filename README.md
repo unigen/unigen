@@ -9,11 +9,11 @@ UniGen is a unit test generator for PHP. It automatically generates boilerplate 
 
 ### Features
 
-* Support mockery and phpunit mocks
-* Configurable test source target directory pattern
-* Configurable namespace pattern
-* Template and template directory path can be configure
-* Configurable parent test case
+* Supports mockery and phpunit mocks
+* Configurable test target directory
+* Configurable namespace
+* Configurable templates
+* Configurable test case
 
 ### Installation
 
