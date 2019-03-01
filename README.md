@@ -7,6 +7,10 @@
 ### UniGen
 UniGen is a unit test generator for PHP. It automatically generates boilerplate for unit tests.
 
+### Integrations
+
+Symfony bundle [unigen/unigen-bundle](https://github.com/unigen/unigen-bundle)
+
 ### Features
 
 * Supports mockery and phpunit mocks
