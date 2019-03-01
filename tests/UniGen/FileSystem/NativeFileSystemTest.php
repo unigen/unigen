@@ -48,7 +48,7 @@ class NativeFileSystemTest extends TestCase
         $this->expectException(FileSystemException::class);
         $this->expectExceptionMessage('Error occurred during file read process');
 
-        $this->sut->read(vfsStream::url('dir/invalidFile'));
+        @$this->sut->read(vfsStream::url('dir/invalidFile'));
     }
 
     public function testWriteShouldWriteAFile()

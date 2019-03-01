@@ -2,35 +2,36 @@
 
 namespace UniGen\Test\Renderer;
 
-use Twig_Environment;
-use UniGen\Config;
 use Mockery;
+use Twig_Environment;
+use UniGen\Config\Config;
 use Mockery\MockInterface;
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use PHPUnit\Framework\TestCase;
-use UniGen\Renderer\ContentDecoratorInterface;
-use UniGen\Renderer\TwigRenderer;
 use UniGen\Sut\SutInterface;
+use PHPUnit\Framework\TestCase;
+use UniGen\Renderer\TwigRenderer;
+use Twig\Loader\FilesystemLoader;
+use UniGen\Renderer\ContentDecoratorInterface;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 class TwigRendererTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    const TEMPLATE = 'template';
     const CONTENT = 'content';
+    const TEMPLATE = 'template';
     const CONTENT_DECORATED = 'decoratedContent';
 
-    /** @var string|MockInterface */
-    private $template;
-
     /** @var Twig_Environment|MockInterface */
-    private $twig;
+    private $twigMock;
 
     /** @var Config|MockInterface */
-    private $testGeneratorConfig;
+    private $configMock;
 
     /** @var SutInterface|MockInterface */
     private $sutMock;
+
+    /** @var FilesystemLoader|MockInterface */
+    private $loaderMock;
 
     /** @var TwigRenderer */
     private $sut;
@@ -40,25 +41,42 @@ class TwigRendererTest extends TestCase
      */
     public function setUp()
     {
-        $this->template = self::TEMPLATE;
+        $this->configMock = Mockery::mock(Config::class);
         $this->sutMock = Mockery::mock(SutInterface::class);
-        $this->twig = Mockery::mock(Twig_Environment::class);
-        $this->testGeneratorConfig = Mockery::mock(Config::class);
+        $this->twigMock = Mockery::mock(Twig_Environment::class);
+        $this->loaderMock = Mockery::mock(FilesystemLoader::class);
 
         $this->sut = new TwigRenderer(
-            $this->template,
-            $this->twig,
-            $this->testGeneratorConfig
+            $this->twigMock,
+            $this->configMock
         );
     }
 
     public function testRenderShouldSuccessfullyRenderContent()
     {
-        $this->twig
+        $this->twigMock
+            ->shouldReceive('getLoader')
+            ->andReturn($this->loaderMock);
+
+        $this->loaderMock
+            ->shouldReceive('addPath')
+            ->with('pathDir');
+
+        $this->configMock
+            ->shouldReceive('get')
+            ->with('templateDir')
+            ->andReturn('pathDir');
+
+        $this->configMock
+            ->shouldReceive('get')
+            ->with('template')
+            ->andReturn(self::TEMPLATE);
+
+        $this->twigMock
             ->shouldReceive('render')
             ->with(self::TEMPLATE, [
                 'sut' => $this->sutMock,
-                'config' => $this->testGeneratorConfig,
+                'config' => $this->configMock,
             ])
             ->andReturn(self::CONTENT);
 
@@ -67,11 +85,29 @@ class TwigRendererTest extends TestCase
 
     public function testRenderShouldReturnDecoratedContent()
     {
-        $this->twig
+        $this->twigMock
+            ->shouldReceive('getLoader')
+            ->andReturn($this->loaderMock);
+
+        $this->loaderMock
+            ->shouldReceive('addPath')
+            ->with('pathDir');
+
+        $this->configMock
+            ->shouldReceive('get')
+            ->with('templateDir')
+            ->andReturn('pathDir');
+
+        $this->configMock
+            ->shouldReceive('get')
+            ->with('template')
+            ->andReturn(self::TEMPLATE);
+
+        $this->twigMock
             ->shouldReceive('render')
             ->with(self::TEMPLATE, [
                 'sut' => $this->sutMock,
-                'config' => $this->testGeneratorConfig,
+                'config' => $this->configMock,
             ])
             ->andReturn(self::CONTENT);
 
