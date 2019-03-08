@@ -57,7 +57,7 @@ class ReflectionSutDependencyAdapter implements SutDependencyInterface
     public function getType()
     {
         if ($this->propertyReflection->hasType()) {
-            return $this->propertyReflection->getType()->getName();
+            return (string) $this->propertyReflection->getType();
         }
 
         return self::UNKNOWN_TYPE;

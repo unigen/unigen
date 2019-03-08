@@ -96,7 +96,7 @@ class ReflectionSutDependencyAdapterTest extends TestCase
         $type = Mockery::mock(\ReflectionType::class);
 
         $type
-            ->shouldReceive('getName')
+            ->shouldReceive('__toString')
             ->andReturn('typeName');
 
         $this->propertyReflection
