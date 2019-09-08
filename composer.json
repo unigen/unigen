@@ -1,15 +1,19 @@
 {
     "name": "unigen/unigen",
     "type": "library",
-    "description": "UniGen is a unit test generator for PHP. It automatically generates unit tests for your classes ",
+    "description": "UniGen is a unit test generator for PHP. It automatically generates unit tests for your classes.",
     "license": "MIT",
     "authors": [
         {
             "name": "Kamil Kujawa",
             "email": "thekamilkujawa@gmail.com"
+        },
+        {
+            "name": "Maciej Kłak",
+            "email": "klak.maciej@gmail.com"
         }
     ],
-    "bin": ["bin/test-generator"],
+    "bin": ["bin/unigen"],
     "keywords": [
         "unit",
         "unit testing",
@@ -18,7 +22,8 @@
     "require": {
         "php": ">=7.0",
         "twig/twig": "^1.0|^2.0",
-        "symfony/console": "^2.0|^3.0|^4.0"
+        "symfony/console": "^2.0|^3.0|^4.0",
+        "justinrainbow/json-schema": "^5.2"
     },
     "autoload": {
         "psr-4": {
