@@ -2,19 +2,17 @@
 
 namespace UniGen\Command;
 
-use Symfony\Component\Console\Input\InputOption;
-use UniGen\Command\Exception\NoExistingSourceFilesException;
-use UniGen\Command\Exception\NoSourceFilesException;
-use UniGen\Command\Exception\TestExistsException;
-use UniGen\Command\Exception\TestGeneratorException;
-use UniGen\Config\ConfigFactory;
-use UniGen\Config\Exception\ConfigException;
-use UniGen\Generator\Exception\TestExistsException as GeneratorTestExistsException;
-use UniGen\Generator\GeneratorFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use UniGen\Command\Exception\TestGeneratorException;
+use UniGen\Config\ConfigFactory;
+use UniGen\Config\Exception\ConfigException;
+use UniGen\Config\Exception\SchemaException;
+use UniGen\Generator\Exception\TestExistsException as GeneratorTestExistsException;
+use UniGen\Generator\GeneratorFactory;
 use UniGen\SourceFileCollection;
 
 class TestGeneratorCommand extends Command
@@ -31,7 +29,7 @@ class TestGeneratorCommand extends Command
     private $generatorFactory;
 
     /**
-     * @param ConfigFactory    $configFactory
+     * @param ConfigFactory $configFactory
      * @param GeneratorFactory $generator
      */
     public function __construct(ConfigFactory $configFactory, GeneratorFactory $generator)
@@ -61,7 +59,6 @@ class TestGeneratorCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @throws ConfigException
      * @throws TestGeneratorException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -86,9 +83,15 @@ class TestGeneratorCommand extends Command
             $output->writeln('No config file. Default configuration applied.');
         }
 
-        $config = $configPath
-            ? $this->configFactory->createFromFile($configPath)
-            : ConfigFactory::createDefault();
+        try {
+            $config = $configPath
+                ? $this->configFactory->createFromFile($configPath)
+                : $this->configFactory->createDefault();
+        } catch (ConfigException | SchemaException $exception) {
+            // todo handle this better
+            throw new TestGeneratorException("TODO", 0 , $exception);
+        }
+
 
         try {
             $generator = $this->generatorFactory->create($config);

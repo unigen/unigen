@@ -4,7 +4,7 @@
 require "vendor/autoload.php";
 
 $configFactory = new UniGen\Config\ConfigFactory(
-    UniGen\Config\Schema::createFromFile(__DIR__ . '/../src/Resources/schema/config.schema.json')
+    new UniGen\Config\SchemaFactory( __DIR__ . '/../src/Resources/schema/config')
 );
 
 $generatorCommand = new UniGen\Command\TestGeneratorCommand(

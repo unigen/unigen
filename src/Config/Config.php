@@ -4,69 +4,43 @@ declare(strict_types=1);
 
 namespace UniGen\Config;
 
+use UniGen\Config\Exception\ConfigException;
+
 class Config
 {
-    /** @var array */
+    /** @var array<string, mixed> */
     private $parameters;
 
     /**
-     * @param array $parameters
+     * @param array<string, mixed> $parameters
+     * @param Schema $schema
+     *
+     * @throws ConfigException
      */
-    public function __construct(array $parameters = [])
+    public function __construct(array $parameters, Schema $schema)
     {
+        $schema->validate($parameters);
         $this->parameters = $parameters;
     }
 
     /**
-     * @param array $parameters
+     * @param string $key
      *
-     * @return Config
+     * @return mixed
+     *
+     * @throws ConfigException
      */
-    public function merge(array $parameters): Config
+    public function get(string $key)
     {
-        $newThis = clone $this;
-        $newThis->parameters = array_merge($this->parameters, array_filter($parameters));
+        if (!$this->has($key)) {
+            throw new ConfigException(sprintf('Config key "%s" does not exist.', $key));
+        }
 
-        return $newThis;
+        return $this->parameters[$key];
     }
 
-    /**
-     * @return string
-     */
-    public function getTestPath(): string
+    public function has(string $key): bool
     {
-        return $this->parameters['testPath'];
-    }
-
-    /**
-     * @return string
-     */
-    public function getTestNamespace(): string
-    {
-        return $this->parameters['testNamespace'];
-    }
-
-    /**
-     * @return string
-     */
-    public function getCaseClass(): string
-    {
-        return $this->parameters['testCaseClass'];
-    }
-
-    /**
-     * @return string
-     */
-    public function getMockFramework(): string
-    {
-        return $this->parameters['mockery'];
-    }
-
-    /**
-     * @return string
-     */
-    public function getTemplate(): string
-    {
-        return $this->parameters['template'];
+        return array_key_exists($key, $this->parameters);
     }
 }

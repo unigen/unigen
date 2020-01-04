@@ -2,34 +2,52 @@
 
 namespace UniGen\Config;
 
-use UniGen\Config\Exception\ConfigSourceException;
-use UniGen\Config\Source\JsonFileSource;
+
+use UniGen\Config\Exception\ConfigException;
+use UniGen\Config\Exception\SchemaException;
+use UniGen\Util\Exception\JsonFileLoaderException;
+use UniGen\Util\JsonFileLoader;
 
 class ConfigFactory
 {
-    /** @var Schema */
-    private $schema;
+    /** @var SchemaFactory */
+    private $schemaFactory;
 
     /**
-     * @param Schema
+     * @param SchemaFactory $schemaFactory
      */
-    public function __construct(Schema $schema)
+    public function __construct(SchemaFactory $schemaFactory)
     {
-        $this->schema = $schema;
+        $this->schemaFactory = $schemaFactory;
     }
 
     /**
      * @return Config
+     *
+     * @throws SchemaException
+     * @throws ConfigException
      */
-    public static function createDefault(): Config
+    public function createDefault(): Config
     {
-        return new Config([
-            'testPath' => 'tests/unit/<dirname>/<filename>Test.<extension>',
+        return new Config(
+            $this->getDefaultParameters(),
+            $this->schemaFactory->createLatestSchema()
+        );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getDefaultParameters(): array
+    {
+        return [
+            'version' => Schema::LATEST_VERSION,
+            'testPath' => 'tests/unit/<dirname(1,)>/<filename>Test.<extension>',
             'testNamespace' => 'Test\Unit\<namespace>',
             'testCaseClass' => 'TestCase',
             'mockFramework' => 'mockery',
             'template' => realpath(__DIR__ . '/../Resources/views/sut_template.php.twig')
-        ]);
+        ];
     }
 
     /**
@@ -37,13 +55,24 @@ class ConfigFactory
      *
      * @return Config
      *
-     * @throws ConfigSourceException
+     * @throws ConfigException
+     * @throws SchemaException
      */
-    public function createFromJsonFile(string $configPath): Config
+    public function createFromFile(string $configPath): Config
     {
-        $content = (new JsonFileSource())->fetch($configPath)->getContent();
-        $this->schema->validate($content);
+        try {
+            $content = JsonFileLoader::getContent($configPath);
+        } catch (JsonFileLoaderException $exception) {
+            throw new ConfigException(
+                sprintf('Unable to load config "%s".', $configPath),
+                0,
+                $exception
+            );
+        }
 
-        return self::createDefault()->merge($content);
+        $parameters = array_merge($this->getDefaultParameters(), $content);
+
+        return new Config($parameters, $this->schemaFactory->create($parameters['version']));
     }
+
 }

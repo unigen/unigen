@@ -1,22 +1,15 @@
 <?php
-/**
- * This file is part of Boozt Platform
- * and belongs to Boozt Fashion AB.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- */
-
 declare(strict_types = 1);
 
 namespace UniGen\Config;
 
-use UniGen\Config\Exception\SchemaException;
+use JsonSchema\Validator;
+use UniGen\Config\Exception\ConfigException;
 
-/** Class JsonSchema */
 class Schema
 {
+    public const LATEST_VERSION = 1;
+
     /** @var array[] */
     private $schema;
 
@@ -28,35 +21,24 @@ class Schema
         $this->schema = $schema;
     }
 
-
-    public function validate(array $rawConfig): void
-    {
-        
-    }
-
     /**
-     * @param string $schemaPath
+     * @param array<string, mixed> $config
      *
-     * @return static
-     * @throws SchemaException
+     * @throws ConfigException
      */
-    public static function createFromFile(string $schemaPath): self
+    public function validate(array $config): void
     {
-        if (!file_exists($schemaPath)) {
-            throw new SchemaException('Schema file "%s" does not exist.', $schemaPath);
-        }
+        $validator = new Validator();
+        $validator->validate(
+            $config,
+            $this->schema
+        );
 
-        $content = file_get_contents($schemaPath);
-        if ($content === false) {
-            throw new SchemaException(sprintf('Unable to fetch schema content: "%s".', $schemaPath));
-        }
+        if (!$validator->isValid()) {
+            $exception = new ConfigException('Invalid config schema.');
+            $exception->setViolations($validator->getErrors());
 
-        $content = json_decode($content, true);
-        $lastError = json_last_error();
-        if ($lastError !== JSON_ERROR_NONE) {
-            throw new SchemaException(sprintf('Invalid schema file "%s". Error code #d.', $lastError));
+            throw $exception;
         }
-
-        return new self($content);
     }
 }

@@ -6,8 +6,7 @@
   "properties": {
     "version": {
       "description": "Config version",
-      "type": "number",
-      "default": 1
+      "type": "number"
     },
     "testPath": {
       "description": "TODO",
