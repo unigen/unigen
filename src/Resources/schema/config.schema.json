@@ -1,0 +1,39 @@
+{
+  "$id": "https://unigen.pl/config.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UniGen Config",
+  "type": "object",
+  "properties": {
+    "version": {
+      "description": "Config version",
+      "type": "number",
+      "default": 1
+    },
+    "testPath": {
+      "description": "TODO",
+      "type": "string"
+    },
+    "testNamespace": {
+      "description": "TODO",
+      "type": "string"
+    },
+    "testCaseClass": {
+      "description": "Parent class that will be extend in generated test",
+      "type": "string"
+    },
+    "mockFramework": {
+      "description": "Test framework",
+      "type": "string",
+      "enum": ["mockery", "phpunit"]
+    },
+    "template": {
+      "description": "Template used to generate test",
+      "type": "string"
+    },
+    "templateDir": {
+      "description": "Twig templates directory",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

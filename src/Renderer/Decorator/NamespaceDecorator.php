@@ -25,15 +25,15 @@ class NamespaceDecorator implements ContentDecoratorInterface
      */
     public function decorate(string $content): string
     {
-        $content = preg_replace(
-            $this->config->get('namespacePattern'),
-            $this->config->get('namespacePatternReplacement'),
-            $content
-        );
-
-        if (is_null($content)) {
-            throw new \InvalidArgumentException("Given namespace patterns are invalid");
-        }
+        //$content = preg_replace(
+        //    $this->config->get('namespacePattern'),
+        //    $this->config->get('namespacePatternReplacement'),
+        //    $content
+        //);
+        //
+        //if (is_null($content)) {
+        //    throw new \InvalidArgumentException("Given namespace patterns are invalid");
+        //}
 
         return $content;
     }

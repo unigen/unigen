@@ -2,53 +2,42 @@
 
 namespace UniGen\Command;
 
-use UniGen\Config\Config;
-use UniGen\Sut\SutInterface;
-use UniGen\Util\ClassNameResolver;
-use UniGen\Sut\SutProviderInterface;
-use UniGen\Renderer\RendererInterface;
-use UniGen\FileSystem\FileSystemInterface;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
+use UniGen\Command\Exception\NoExistingSourceFilesException;
+use UniGen\Command\Exception\NoSourceFilesException;
+use UniGen\Command\Exception\TestExistsException;
+use UniGen\Command\Exception\TestGeneratorException;
+use UniGen\Config\ConfigFactory;
+use UniGen\Config\Exception\ConfigException;
+use UniGen\Generator\Exception\TestExistsException as GeneratorTestExistsException;
+use UniGen\Generator\GeneratorFactory;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use UniGen\SourceFileCollection;
 
 class TestGeneratorCommand extends Command
 {
-    const CODE_ERROR = 1;
-    const CODE_SUCCESS = 0;
-
     const NAME = 'unigen:generate';
 
-    /** @var Config */
-    private $config;
+    const OPTION_CONFIG_FILE = 'config';
+    const ARG_FILES = 'source_files';
 
-    /** @var RendererInterface */
-    private $renderer;
+    /** @var ConfigFactory */
+    private $configFactory;
 
-    /** @var FileSystemInterface */
-    private $fileSystem;
-
-    /** @var SutProviderInterface */
-    private $sutProvider;
+    /** @var GeneratorFactory */
+    private $generatorFactory;
 
     /**
-     * @param Config               $config
-     * @param RendererInterface    $renderer
-     * @param FileSystemInterface  $fileSystem
-     * @param SutProviderInterface $sutProvider
+     * @param ConfigFactory    $configFactory
+     * @param GeneratorFactory $generator
      */
-    public function __construct(
-        Config $config,
-        RendererInterface $renderer,
-        FileSystemInterface $fileSystem,
-        SutProviderInterface $sutProvider
-    ) {
-        $this->config = $config;
-        $this->renderer = $renderer;
-        $this->fileSystem = $fileSystem;
-        $this->sutProvider = $sutProvider;
+    public function __construct(ConfigFactory $configFactory, GeneratorFactory $generator)
+    {
+        $this->configFactory = $configFactory;
+        $this->generatorFactory = $generator;
 
         parent::__construct();
     }
@@ -60,75 +49,87 @@ class TestGeneratorCommand extends Command
     {
         $this
             ->setName(self::NAME)
-            ->addArgument('path', InputArgument::REQUIRED)
-            ->addOption('testCase', 't', InputOption::VALUE_REQUIRED)
-            ->addOption('pathPattern', 'p', InputOption::VALUE_REQUIRED)
-            ->addOption('mockFramework', 'f', InputOption::VALUE_REQUIRED)
-            ->addOption('template', 'b', InputOption::VALUE_REQUIRED)
-            ->addOption('templateDir', 'd', InputOption::VALUE_REQUIRED)
-            ->addOption('namespacePattern', 'l', InputOption::VALUE_REQUIRED)
-            ->addOption('pathPatternReplacement', 'z', InputOption::VALUE_REQUIRED)
-            ->addOption('namespacePatternReplacement', 'x', InputOption::VALUE_REQUIRED);
+            ->addOption(
+                self::OPTION_CONFIG_FILE,
+                'c',
+                InputOption::VALUE_REQUIRED,
+                'config file path',
+                '.unigen.json'
+            )
+            ->addArgument(self::ARG_FILES, InputArgument::IS_ARRAY);
     }
 
     /**
      * {@inheritdoc}
-     */
-    protected function initialize(InputInterface $input, OutputInterface $output)
-    {
-        $this->config->merge($input->getOptions());
-    }
-
-    /**
-     * {@inheritdoc}
+     * @throws ConfigException
+     * @throws TestGeneratorException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $path = $input->getArgument('path');
-
-        if (!$this->fileSystem->exist($path)) {
-            $output->writeln("<error>Class to test does not exist in path {$path}</error>");
-
-            return self::CODE_ERROR;
+        $sourceFileCollection = new SourceFileCollection($this->getSourceFiles($input));
+        if (!$sourceFileCollection->hasSome()) {
+            throw new TestGeneratorException(
+                'No source file(s).',
+                TestGeneratorException::CODE_NO_SOURCE_FILES
+            );
         }
 
-        $sut = $this->retrieveSut($path);
-        $testPath = $this->retrieveTestTargetPath($sut);
-
-        if ($this->fileSystem->exist($testPath)) {
-            $output->writeln("Test file {$testPath} already exist");
-
-            return self::CODE_ERROR;
+        if ($sourceFileCollection->hasMissing()) {
+           throw new TestGeneratorException(
+               sprintf('Source files do not exist: %s', json_encode($sourceFileCollection->getMissing())),
+               TestGeneratorException::CODE_NO_EXISTING_SOURCE_FILES
+           );
         }
 
-        $this->fileSystem->write($testPath, $this->renderer->render($sut));
+        $configPath = $this->getConfigFile($input);
+        if ($configPath === null) {
+            $output->writeln('No config file. Default configuration applied.');
+        }
 
-        $output->writeln("<info>Test file {$testPath} has been generated successfully</info>");
+        $config = $configPath
+            ? $this->configFactory->createFromFile($configPath)
+            : ConfigFactory::createDefault();
 
-        return self::CODE_SUCCESS;
+        try {
+            $generator = $this->generatorFactory->create($config);
+            foreach ($sourceFileCollection->getExisting() as $sourceFile) {
+                $result = $generator->generate($sourceFile);
+            }
+            $output->writeln("<info>Test file {$result->getTestPath()} has been generated successfully</info>");
+        } catch (GeneratorTestExistsException $exception) {
+            throw new TestGeneratorException(
+                sprintf('Test file "%s" already exists', $exception->getTestPath()),
+                TestGeneratorException::CODE_TEST_EXISTS,
+                $exception
+            );
+        }
+
+        return 0;
     }
 
-    /**
-     * @param string $path
-     *
-     * @return SutInterface
-     */
-    private function retrieveSut(string $path): SutInterface
-    {
-        return $this->sutProvider->provide(ClassNameResolver::resolve($this->fileSystem->read($path)));
-    }
 
     /**
-     * @param SutInterface $sut
+     * @param InputInterface $input
      *
      * @return string
      */
-    private function retrieveTestTargetPath(SutInterface $sut): string
+    private function getConfigFile(InputInterface $input): ?string
     {
-        return preg_replace(
-            $this->config->get('pathPattern'),
-            $this->config->get('pathPatternReplacement'),
-            $sut->getPath()
-        );
+        $configParam = $input->getOption(self::OPTION_CONFIG_FILE);
+        $configPath = realpath($configParam);
+
+        return $configPath === false
+            ? null
+            : $configPath;
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return string[]
+     */
+    private function getSourceFiles(InputInterface $input): array
+    {
+        return $input->getArgument(self::ARG_FILES);
     }
 }

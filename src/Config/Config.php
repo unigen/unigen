@@ -19,39 +19,54 @@ class Config
 
     /**
      * @param array $parameters
-     */
-    public function merge(array $parameters)
-    {
-        $this->parameters = array_merge($this->parameters, array_filter($parameters));
-    }
-
-    /**
-     * @param $key
-     * @param $value
-     */
-    public function set($key, $value)
-    {
-        $this->parameters[$key] = $value;
-    }
-
-    /**
-     * @param string $key
-     * @param null   $default
      *
-     * @return mixed
+     * @return Config
      */
-    public function get(string $key, $default = null)
+    public function merge(array $parameters): Config
     {
-        return $this->has($key) ? $this->parameters[$key] : $default;
+        $newThis = clone $this;
+        $newThis->parameters = array_merge($this->parameters, array_filter($parameters));
+
+        return $newThis;
     }
 
     /**
-     * @param $key
-     *
-     * @return bool
+     * @return string
      */
-    public function has($key): bool
+    public function getTestPath(): string
     {
-        return isset($this->parameters[$key]);
+        return $this->parameters['testPath'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getTestNamespace(): string
+    {
+        return $this->parameters['testNamespace'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getCaseClass(): string
+    {
+        return $this->parameters['testCaseClass'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getMockFramework(): string
+    {
+        return $this->parameters['mockery'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplate(): string
+    {
+        return $this->parameters['template'];
     }
 }
