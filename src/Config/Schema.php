@@ -28,9 +28,10 @@ class Schema
      */
     public function validate(array $config): void
     {
+        $configObject = (object) $config;
         $validator = new Validator();
         $validator->validate(
-            $config,
+            $configObject,
             $this->schema
         );
 
