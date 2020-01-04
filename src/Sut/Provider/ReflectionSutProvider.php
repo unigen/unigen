@@ -19,9 +19,6 @@ class ReflectionSutProvider implements SutProviderInterface
     {
         $sut = new ReflectionSutAdapter(new ReflectionClass($class));
 
-        (new SutValidator())->validate($sut);
-
-
         return $sut;
     }
 }

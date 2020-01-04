@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use {{ sut.getName }};
 
-class {{ sut.getShortName }}Test extends {{ config.get('testCase') }}
+class {{ sut.getShortName }}Test extends {{ config.get('testCaseClass') }}
 {
 {% if config.get('mockFramework') == 'mockery' and sut.hasDependencies %}
     {{ 'use MockeryPHPUnitIntegration;\n' }}

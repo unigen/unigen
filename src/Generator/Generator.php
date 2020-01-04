@@ -8,7 +8,7 @@ use UniGen\Sut\SutInterface;
 use UniGen\Sut\SutProviderInterface;
 use UniGen\Util\ClassNameResolver;
 
-// TODO this class is going too much
+// TODO this class is doing too much
 class Generator
 {
     /** @var SutProviderInterface */
@@ -78,9 +78,6 @@ class Generator
      */
     private function retrieveSut(string $path): SutInterface
     {
-        echo ClassNameResolver::resolve(file_get_contents($path));
-        die();
-
         return $this->sutProvider->provide(ClassNameResolver::resolve(file_get_contents($path)));
     }
 }
