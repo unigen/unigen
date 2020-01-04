@@ -2,16 +2,16 @@
 
 namespace UniGen\Sut;
 
-use UniGen\Sut\Exception\SutValidatorException;
+use UniGen\Sut\Exception\GeneratorException;
 
 interface SutProviderInterface
 {
     /**
      * @param string $class
      *
-     * @throws SutValidatorException
-     *
      * @return SutInterface
+     *@throws GeneratorException
+     *
      */
     public function provide(string $class): SutInterface;
 }

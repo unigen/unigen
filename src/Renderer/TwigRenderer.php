@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace UniGen\Renderer;
 
 use Twig\Environment;
-use Twig_Environment;
-use UniGen\Config\Config;
-use UniGen\Sut\SutInterface;
+use Twig\Error\Error;
+use Twig\Error\LoaderError;
 use Twig\Loader\FilesystemLoader;
+use UniGen\Config\Config;
+use UniGen\Config\Exception\ConfigException;
+use UniGen\Renderer\Exception\RendererException;
+use UniGen\Sut\SutInterface;
 
 class TwigRenderer implements RendererInterface
 {
@@ -21,9 +24,6 @@ class TwigRenderer implements RendererInterface
     /** @var Config */
     private $config;
 
-    /** @var ContentDecoratorInterface[] */
-    private $decorators = [];
-
     /**
      * @param Environment $twig
      * @param Config           $config
@@ -35,37 +35,39 @@ class TwigRenderer implements RendererInterface
     }
 
     /**
-     * @param ContentDecoratorInterface $decorator
-     */
-    public function addDecorator(ContentDecoratorInterface $decorator)
-    {
-        $this->decorators[] = $decorator;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function render(SutInterface $sut): string
     {
-        $this->applyTemplatePath();
+        try {
+            $this->applyTemplatePath();
+        } catch (LoaderError | ConfigException $exception) {
+            throw new RendererException('An error occurred while set up renderer.', 0, $exception);
+        }
 
-        $content = $this->twig->render(basename($this->config->getTemplate()), [
-            self::SUT => $sut,
-            self::CONFIG => $this->config
-        ]);
-
-        foreach ($this->decorators as $decorator) {
-            $content = $decorator->decorate($content);
+        try {
+            $content = $this->twig->render(
+                basename($this->config->get('template')),
+                [
+                    self::SUT => $sut,
+                    self::CONFIG => $this->config
+                ]
+            );
+        } catch (Error | ConfigException $exception) {
+            throw new RendererException('SUT render failed.', 0 , $exception);
         }
 
         return $content;
     }
 
-    private function applyTemplatePath()
+    /**
+     * @throws LoaderError
+     * @throws ConfigException
+     */
+    private function applyTemplatePath(): void
     {
         /** @var FilesystemLoader $loader */
         $loader = $this->twig->getLoader();
-
-        $loader->addPath(dirname($this->config->getTemplate()));
+        $loader->addPath(dirname($this->config->get('template')));
     }
 }

@@ -5,24 +5,13 @@ declare(strict_types=1);
 namespace UniGen\Sut\Provider;
 
 use ReflectionClass;
-use UniGen\Sut\SutInterface;
-use UniGen\Sut\SutValidator;
-use UniGen\Sut\SutProviderInterface;
 use UniGen\Sut\Adapter\ReflectionSutAdapter;
+use UniGen\Sut\SutInterface;
+use UniGen\Sut\SutProviderInterface;
+use UniGen\Sut\SutValidator;
 
 class ReflectionSutProvider implements SutProviderInterface
 {
-    /** @var SutValidator */
-    private $validator;
-
-    /**
-     * @param SutValidator $validator
-     */
-    public function __construct(SutValidator $validator)
-    {
-        $this->validator = $validator;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -30,7 +19,8 @@ class ReflectionSutProvider implements SutProviderInterface
     {
         $sut = new ReflectionSutAdapter(new ReflectionClass($class));
 
-        $this->validator->validate($sut);
+        (new SutValidator())->validate($sut);
+
 
         return $sut;
     }

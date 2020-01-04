@@ -1,8 +1,7 @@
 <?php
-
+declare(strict_types=1);
 
 namespace UniGen\Generator;
-
 
 class Result
 {
@@ -10,7 +9,6 @@ class Result
     private $testPath;
 
     /**
-     * Result constructor.
      * @param string $testPath
      */
     public function __construct(string $testPath)
@@ -18,6 +16,9 @@ class Result
         $this->testPath = $testPath;
     }
 
+    /**
+     * @return string
+     */
     public function getTestPath(): string
     {
         return $this->testPath;

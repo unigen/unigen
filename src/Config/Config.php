@@ -39,6 +39,11 @@ class Config
         return $this->parameters[$key];
     }
 
+    /**
+     * @param string $key
+     *
+     * @return bool
+     */
     public function has(string $key): bool
     {
         return array_key_exists($key, $this->parameters);

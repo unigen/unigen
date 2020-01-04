@@ -3,13 +3,13 @@
 namespace UniGen\Test\Sut;
 
 use Mockery;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Mockery\MockInterface;
+use PHPUnit\Framework\TestCase;
+use UniGen\Sut\Exception\GeneratorException;
+use UniGen\Sut\SutCheckInterface;
 use UniGen\Sut\SutInterface;
 use UniGen\Sut\SutValidator;
-use PHPUnit\Framework\TestCase;
-use UniGen\Sut\SutCheckInterface;
-use UniGen\Sut\Exception\SutValidatorException;
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 class SutValidatorTest extends TestCase
 {
@@ -56,7 +56,7 @@ class SutValidatorTest extends TestCase
             ->shouldReceive('message')
             ->andReturn('Second check');
 
-        $this->expectException(SutValidatorException::class);
+        $this->expectException(GeneratorException::class);
         $this->expectExceptionMessage('Second check');
 
         $this->sut->addCheck($validCheck);
@@ -85,7 +85,7 @@ class SutValidatorTest extends TestCase
             ->shouldReceive('message')
             ->andReturn('Second check');
 
-        $this->expectException(SutValidatorException::class);
+        $this->expectException(GeneratorException::class);
         $this->expectExceptionMessage('Second check');
 
         $this->sut->addCheck($invalidCheck);

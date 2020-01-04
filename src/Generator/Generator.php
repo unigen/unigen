@@ -3,11 +3,12 @@
 namespace UniGen\Generator;
 
 use UniGen\Renderer\RendererInterface;
-use UniGen\Sut\Exception\SutValidatorException;
+use UniGen\Sut\Exception\GeneratorException;
 use UniGen\Sut\SutInterface;
 use UniGen\Sut\SutProviderInterface;
 use UniGen\Util\ClassNameResolver;
 
+// TODO this class is going too much
 class Generator
 {
     /** @var SutProviderInterface */
@@ -32,11 +33,15 @@ class Generator
      * @param string $sourceFile
      *
      * @return Result
-     * @throws SutValidatorException
+     * @throws GeneratorException
      */
     public function generate(string $sourceFile): Result
     {
         $sut = $this->retrieveSut($sourceFile);
+        $this->validateSut($sut);
+
+
+
         $content = $this->renderer->render($sut);
 
         $testPath = 'file.php';
@@ -46,10 +51,30 @@ class Generator
     }
 
     /**
+     * @param SutInterface $sut
+     *
+     * @throws GeneratorException
+     */
+    public function validateSut(SutInterface $sut)
+    {
+        if ($sut->isAbstract()) {
+            throw new GeneratorException(sprintf('SUT cannot be an abstract class "%s".', $sut->getName()));
+        }
+
+        if ($sut->isAbstract()) {
+            throw new GeneratorException(sprintf('SUT cannot be an interface "%s".', $sut->getName()));
+        }
+
+        if ($sut->isTrait()) {
+            throw new GeneratorException(sprintf('SUT cannot be a trait "%s".', $sut->getName()));
+        }
+    }
+
+    /**
      * @param string $path
      *
      * @return SutInterface
-     * @throws SutValidatorException
+     * @throws GeneratorException
      */
     private function retrieveSut(string $path): SutInterface
     {

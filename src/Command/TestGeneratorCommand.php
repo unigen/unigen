@@ -64,6 +64,7 @@ class TestGeneratorCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $sourceFileCollection = new SourceFileCollection($this->getSourceFiles($input));
+        // TODO noiwa metoda
         if (!$sourceFileCollection->hasSome()) {
             throw new TestGeneratorException(
                 'No source file(s).',
@@ -78,6 +79,7 @@ class TestGeneratorCommand extends Command
            );
         }
 
+        // TODO --- nowa metoda
         $configPath = $this->getConfigFile($input);
         if ($configPath === null) {
             $output->writeln('No config file. Default configuration applied.');
@@ -91,7 +93,7 @@ class TestGeneratorCommand extends Command
             // todo handle this better
             throw new TestGeneratorException("TODO", 0 , $exception);
         }
-
+        // TODO nowa metoda
 
         try {
             $generator = $this->generatorFactory->create($config);
