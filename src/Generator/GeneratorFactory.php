@@ -3,15 +3,24 @@ declare(strict_types=1);
 
 namespace UniGen\Generator;
 
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
 use UniGen\Config\Config;
-use UniGen\Renderer\TwigRenderer;
+use UniGen\Renderer\RendererFactory;
 use UniGen\Sut\Provider\ReflectionSutProvider;
-use UniGen\Util\ScalarValueMapperTwigFilter;
 
 class GeneratorFactory
 {
+    /** @var RendererFactory */
+    private $rendererFactory;
+
+    /**
+     * @param RendererFactory $rendererFactory
+     */
+    public function __construct(RendererFactory $rendererFactory)
+    {
+        $this->rendererFactory = $rendererFactory;
+    }
+
+
     /**
      * @param Config $config
      *
@@ -21,18 +30,7 @@ class GeneratorFactory
     {
         return new Generator(
             new ReflectionSutProvider(),
-            new TwigRenderer($this->createTwig(), $config)
+            $this->rendererFactory->create($config)
         );
-    }
-
-    /**
-     * @return Environment
-     */
-    private function createTwig(): Environment
-    {
-        $twig = new Environment(new FilesystemLoader());
-        $twig->addExtension(new ScalarValueMapperTwigFilter());
-
-        return $twig;
     }
 }

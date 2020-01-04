@@ -7,9 +7,13 @@ $configFactory = new UniGen\Config\ConfigFactory(
     new UniGen\Config\SchemaFactory( __DIR__ . '/../src/Resources/schema/config')
 );
 
+$generatorFactory = new UniGen\Generator\GeneratorFactory(
+    new UniGen\Renderer\RendererFactory()
+);
+
 $generatorCommand = new UniGen\Command\TestGeneratorCommand(
     $configFactory,
-    new UniGen\Generator\GeneratorFactory()
+    $generatorFactory
 );
 
 $application = new Symfony\Component\Console\Application();

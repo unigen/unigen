@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace UniGen\Util;
+namespace UniGen\Renderer\Twig;
 
-use Twig\TwigFilter;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
 class ScalarValueMapperTwigFilter extends AbstractExtension
 {

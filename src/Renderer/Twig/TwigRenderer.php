@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UniGen\Renderer;
+namespace UniGen\Renderer\Twig;
 
 use Twig\Environment;
 use Twig\Error\Error;
@@ -11,6 +11,7 @@ use Twig\Loader\FilesystemLoader;
 use UniGen\Config\Config;
 use UniGen\Config\Exception\ConfigException;
 use UniGen\Renderer\Exception\RendererException;
+use UniGen\Renderer\RendererInterface;
 use UniGen\Sut\SutInterface;
 
 class TwigRenderer implements RendererInterface
