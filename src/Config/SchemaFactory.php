@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace UniGen\Config;
 
 use UniGen\Config\Exception\SchemaException;
-use UniGen\Util\Exception\FileLoaderException;
-use UniGen\Util\JsonFileLoader;
+use UniGen\Util\FileLoader\FileLoaderException;
+use UniGen\Util\FileLoader\JsonFileLoader;
 
 class SchemaFactory
 {
