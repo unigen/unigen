@@ -4,28 +4,28 @@ namespace UniGen\Generator;
 
 use UniGen\Renderer\RendererInterface;
 use UniGen\Sut\Exception\GeneratorException;
+use UniGen\Sut\SutFactory;
 use UniGen\Sut\SutInterface;
-use UniGen\Sut\SutProviderInterface;
 use UniGen\Util\ClassNameResolver;
 
 // TODO this class is doing too much
 class Generator
 {
-    /** @var SutProviderInterface */
-    private $sutProvider;
+    /** @var SutFactory */
+    private $sutFactory;
 
     /** @var RendererInterface */
     private $renderer;
 
     /**
-     * @param SutProviderInterface $sutProvider
+     * @param SutFactory $sutFactory
      * @param RendererInterface $renderer
      */
     public function __construct(
-        SutProviderInterface $sutProvider,
+        SutFactory $sutFactory,
         RendererInterface $renderer
     ) {
-        $this->sutProvider = $sutProvider;
+        $this->sutFactory = $sutFactory;
         $this->renderer = $renderer;
     }
 
@@ -39,8 +39,6 @@ class Generator
     {
         $sut = $this->retrieveSut($sourceFile);
         $this->validateSut($sut);
-
-
 
         $content = $this->renderer->render($sut);
 
@@ -78,6 +76,6 @@ class Generator
      */
     private function retrieveSut(string $path): SutInterface
     {
-        return $this->sutProvider->provide(ClassNameResolver::resolve(file_get_contents($path)));
+        return $this->sutFactory->create(ClassNameResolver::resolve(file_get_contents($path)));
     }
 }

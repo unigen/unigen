@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UniGen\Util;
+namespace UniGen\Sut;
 
 class ScalarValueResolver
 {

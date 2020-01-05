@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace UniGen\Sut\Adapter;
 
 use ReflectionParameter;
-use UniGen\Util\ScalarValueResolver;
+use UniGen\Sut\ScalarValueResolver;
 use UniGen\Sut\SutDependencyInterface;
 
 class ReflectionSutDependencyAdapter implements SutDependencyInterface

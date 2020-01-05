@@ -8,6 +8,7 @@ $configFactory = new UniGen\Config\ConfigFactory(
 );
 
 $generatorFactory = new UniGen\Generator\GeneratorFactory(
+    new UniGen\Sut\SutFactory(),
     new UniGen\Renderer\RendererFactory()
 );
 

@@ -5,21 +5,25 @@ namespace UniGen\Generator;
 
 use UniGen\Config\Config;
 use UniGen\Renderer\RendererFactory;
-use UniGen\Sut\Provider\ReflectionSutProvider;
+use UniGen\Sut\SutFactory;
 
 class GeneratorFactory
 {
+    /** @var SutFactory */
+    private $sutFactory;
+
     /** @var RendererFactory */
     private $rendererFactory;
 
     /**
+     * @param SutFactory $sutFactory
      * @param RendererFactory $rendererFactory
      */
-    public function __construct(RendererFactory $rendererFactory)
+    public function __construct(SutFactory $sutFactory, RendererFactory $rendererFactory)
     {
+        $this->sutFactory = $sutFactory;
         $this->rendererFactory = $rendererFactory;
     }
-
 
     /**
      * @param Config $config
@@ -29,7 +33,7 @@ class GeneratorFactory
     public function create(Config $config): Generator
     {
         return new Generator(
-            new ReflectionSutProvider(),
+            $this->sutFactory,
             $this->rendererFactory->create($config)
         );
     }
