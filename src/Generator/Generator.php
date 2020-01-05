@@ -53,6 +53,8 @@ class Generator
         $content = $this->renderer->render(new Context($sut, $testNamespace));
 
         $testPath = (new PathResolver($this->config->get('testPath')))->resolve($sourceFile); // 'file.php';
+        echo $testPath;
+        die();
         file_put_contents($testPath, $content);
 
         return new Result($testPath);

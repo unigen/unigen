@@ -42,7 +42,7 @@ class ConfigFactory
     {
         return [
             'version' => Schema::LATEST_VERSION,
-            'testPath' => 'tests/unit/<dirname(1,)>/<filename>Test.<extension>',
+            'testPath' => 'tests/unit/<dirname(1)>/<filename>Test.<extension>',
             'testNamespace' => 'Test\Unit\<namespace>',
             'testCaseClass' => 'TestCase',
             'mockFramework' => 'mockery',
