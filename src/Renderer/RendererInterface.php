@@ -2,8 +2,6 @@
 
 namespace UniGen\Renderer;
 
-use UniGen\Renderer\Exception\RendererException;
-
 interface RendererInterface
 {
     /**

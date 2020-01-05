@@ -6,6 +6,8 @@ namespace UniGen\Generator\Resolver;
 
 // TODO refactor
 // https://stackoverflow.com/questions/7153000/get-class-name-from-file
+use UniGen\Util\FileLoader\PlainFileLoader;
+
 class ClassNameResolver
 {
     private const NAMESPACE_SEPARATOR = '\\';
@@ -19,8 +21,7 @@ class ClassNameResolver
      */
     public function resolveFromFile(string $path): string
     {
-        // TODO class loader
-        $content = file_get_contents($path);
+        $content = PlainFileLoader::getContent($path);
 
         return $this->resolve($content);
     }
@@ -32,7 +33,7 @@ class ClassNameResolver
      */
     public function resolve(string $content): string
     {
-        return self::extractNamespace($content) . self::NAMESPACE_SEPARATOR . self::extractClass($content);
+        return $this->extractNamespace($content) . self::NAMESPACE_SEPARATOR . $this->extractClass($content);
     }
 
     /**

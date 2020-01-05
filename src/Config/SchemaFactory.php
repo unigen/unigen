@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace UniGen\Config;
 
 use UniGen\Config\Exception\SchemaException;
-use UniGen\Util\Exception\JsonFileLoaderException;
+use UniGen\Util\Exception\FileLoaderException;
 use UniGen\Util\JsonFileLoader;
 
 class SchemaFactory
@@ -33,7 +33,7 @@ class SchemaFactory
 
         try {
             $content = JsonFileLoader::getContent($schemaPath);
-        } catch (JsonFileLoaderException $exception) {
+        } catch (FileLoaderException $exception) {
             throw new SchemaException(
                 sprintf('Unable to load schema version #%d.', $version),
                 0,

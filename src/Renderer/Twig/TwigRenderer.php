@@ -11,7 +11,7 @@ use Twig\Loader\FilesystemLoader;
 use UniGen\Config\Config;
 use UniGen\Config\Exception\ConfigException;
 use UniGen\Renderer\Context;
-use UniGen\Renderer\Exception\RendererException;
+use UniGen\Renderer\RendererException;
 use UniGen\Renderer\RendererInterface;
 
 class TwigRenderer implements RendererInterface

@@ -5,8 +5,8 @@ namespace UniGen\Config;
 
 use UniGen\Config\Exception\ConfigException;
 use UniGen\Config\Exception\SchemaException;
-use UniGen\Util\Exception\JsonFileLoaderException;
-use UniGen\Util\JsonFileLoader;
+use UniGen\Util\FileLoader\FileLoaderException;
+use UniGen\Util\FileLoader\JsonFileLoader;
 
 class ConfigFactory
 {
@@ -62,7 +62,7 @@ class ConfigFactory
     {
         try {
             $content = JsonFileLoader::getContent($configPath);
-        } catch (JsonFileLoaderException $exception) {
+        } catch (FileLoaderException $exception) {
             throw new ConfigException(
                 sprintf('Unable to load config "%s".', $configPath),
                 0,
