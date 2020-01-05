@@ -52,9 +52,10 @@ class Generator
 
         $content = $this->renderer->render(new Context($sut, $testNamespace));
 
-        $testPath = (new PathResolver($this->config->get('testPath')))->resolve($sourceFile); // 'file.php';
-        echo $testPath;
-        die();
+        $testPath = (new PathResolver($this->config->get('testPath')))->resolve($sourceFile);
+        // TODO move to FileWriter
+
+        mkdir(dirname($testPath), 0777, true);
         file_put_contents($testPath, $content);
 
         return new Result($testPath);

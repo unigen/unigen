@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace UniGen\Util\FileLoader;
 
+// TODO change to file reader
 class JsonFileLoader
 {
     /**
