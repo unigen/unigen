@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UniGen\Sut\Adapter;
+namespace UniGen\Sut\Reflection;
 
 use ReflectionClass;
 use ReflectionMethod;

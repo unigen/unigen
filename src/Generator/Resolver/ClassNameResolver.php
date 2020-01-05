@@ -4,16 +4,10 @@ declare(strict_types=1);
 
 namespace UniGen\Generator\Resolver;
 
-// TODO refactor
-// https://stackoverflow.com/questions/7153000/get-class-name-from-file
 use UniGen\Util\FileLoader\PlainFileLoader;
 
 class ClassNameResolver
 {
-    private const NAMESPACE_SEPARATOR = '\\';
-    private const CLASS_PATTERN = '/class\s(\w+)/';
-    private const NAMESPACE_PATTERN = '/namespace\s(.+);/';
-
     /**
      * @param string $path
      *
@@ -21,6 +15,7 @@ class ClassNameResolver
      */
     public function resolveFromFile(string $path): string
     {
+        // TODO wrap exception
         $content = PlainFileLoader::getContent($path);
 
         return $this->resolve($content);
@@ -33,49 +28,62 @@ class ClassNameResolver
      */
     public function resolve(string $content): string
     {
-        return $this->extractNamespace($content) . self::NAMESPACE_SEPARATOR . $this->extractClass($content);
-    }
-
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
-    private function extractClass(string $content): string
-    {
-        $class = self::extract(self::CLASS_PATTERN, $content);
-
-        if (empty($class)) {
-            throw new \InvalidArgumentException("Given file content must contains class syntax");
+        $tokens = token_get_all($content);
+        $class = $this->extractClass($tokens);
+        if ($class === null) {
+            // TODO
+           // throw new \RuntimeException('TODO');
         }
 
-        return $class;
+        $namespace = $this->extractNamespace($tokens);
+
+        return $namespace === null
+            ? $class
+            : $namespace . '\\' . $class;
     }
 
     /**
-     * @param string $content
+     * @param array[] $tokens
      *
-     * @return string
+     * @return string|null
      */
-    private function extractNamespace(string $content): string
+    private function extractClass(array $tokens): ?string
     {
-        return self::extract(self::NAMESPACE_PATTERN, $content);
-    }
-
-    /**
-     * @param string $pattern
-     * @param string $content
-     *
-     * @return string
-     */
-    private function extract(string $pattern, string $content): string
-    {
-        preg_match($pattern, $content, $matches);
-
-        if (empty($matches[1])) {
-            return '';
+        for ($i = 0; $i < count($tokens); $i++) {
+            if ($tokens[$i][0] === T_CLASS) {
+                for ($j = $i + 1; $j < count($tokens); $j++) {
+                    if ($tokens[$j] === '{') {
+                        return $tokens[$i + 2][1];
+                    }
+                }
+            }
         }
 
-        return $matches[1];
+        return null;
+    }
+
+    /**
+     * @param array[] $tokens
+     *
+     * @return string|null
+     */
+    private function extractNamespace(array $tokens): ?string
+    {
+        $namespace = '';
+        for ($i = 0; $i < count($tokens); $i++) {
+            $tokenType = $tokens[$i][0];
+
+            if ($tokenType === T_NAMESPACE) {
+                for ($j = $i + 1; $j < count($tokens); $j++) {
+                    if ($tokens[$j][0] === T_STRING) {
+                        $namespace .= '\\' . $tokens[$j][1];
+                    } else if ($tokens[$j] === '{' || $tokens[$j] === ';') {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $namespace === '' ? null : $namespace;
     }
 }

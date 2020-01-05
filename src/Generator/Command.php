@@ -11,7 +11,6 @@ use UniGen\Config\ConfigFactory;
 use UniGen\Config\Exception\ConfigException;
 use UniGen\Config\Exception\SchemaException;
 use UniGen\Generator\Exception\TestGeneratorException;
-use UniGen\SourceFileCollection;
 
 class Command extends BaseCommand
 {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace UniGen\Sut;
 
 use ReflectionClass;
-use UniGen\Sut\Adapter\ReflectionSutAdapter;
+use UniGen\Sut\Reflection\ReflectionSutAdapter;
 
 class SutFactory
 {

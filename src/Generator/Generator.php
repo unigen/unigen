@@ -88,6 +88,7 @@ class Generator
     private function retrieveSut(string $path): SutInterface
     {
         $className = (new ClassNameResolver())->resolveFromFile($path);
+
         $sut = $this->sutFactory->create($className);
         $this->validateSut($sut);
 
