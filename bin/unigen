@@ -12,7 +12,7 @@ $generatorFactory = new UniGen\Generator\GeneratorFactory(
     new UniGen\Renderer\RendererFactory()
 );
 
-$generatorCommand = new UniGen\Command\TestGeneratorCommand(
+$generatorCommand = new UniGen\Generator\Command(
     $configFactory,
     $generatorFactory
 );

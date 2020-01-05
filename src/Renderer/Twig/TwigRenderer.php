@@ -10,14 +10,15 @@ use Twig\Error\LoaderError;
 use Twig\Loader\FilesystemLoader;
 use UniGen\Config\Config;
 use UniGen\Config\Exception\ConfigException;
+use UniGen\Renderer\Context;
 use UniGen\Renderer\Exception\RendererException;
 use UniGen\Renderer\RendererInterface;
-use UniGen\Sut\SutInterface;
 
 class TwigRenderer implements RendererInterface
 {
-    const SUT = 'sut';
-    const CONFIG = 'config';
+    private const SUT = 'sut';
+    private const CONFIG = 'config';
+    private const TEST_NAMESPACE = 'testNamespace';
 
     /** @var Environment */
     private $twig;
@@ -38,7 +39,7 @@ class TwigRenderer implements RendererInterface
     /**
      * {@inheritdoc}
      */
-    public function render(SutInterface $sut): string
+    public function render(Context $context): string
     {
         try {
             $this->applyTemplatePath();
@@ -50,8 +51,9 @@ class TwigRenderer implements RendererInterface
             $content = $this->twig->render(
                 basename($this->config->get('template')),
                 [
-                    self::SUT => $sut,
-                    self::CONFIG => $this->config
+                    self::SUT => $context->getSut(),
+                    self::CONFIG => $this->config,
+                    self::TEST_NAMESPACE => $context->getTestNamespace()
                 ]
             );
         } catch (Error | ConfigException $exception) {

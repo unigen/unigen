@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace UniGen\Command\Exception;
+namespace UniGen\Generator\Exception;
 
 use RuntimeException;
 

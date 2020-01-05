@@ -1,21 +1,19 @@
 <?php
 
-namespace UniGen\Command;
+namespace UniGen\Generator;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use UniGen\Command\Exception\TestGeneratorException;
 use UniGen\Config\ConfigFactory;
 use UniGen\Config\Exception\ConfigException;
 use UniGen\Config\Exception\SchemaException;
-use UniGen\Generator\Exception\TestExistsException as GeneratorTestExistsException;
-use UniGen\Generator\GeneratorFactory;
+use UniGen\Generator\Exception\TestGeneratorException;
 use UniGen\SourceFileCollection;
 
-class TestGeneratorCommand extends Command
+class Command extends BaseCommand
 {
     const NAME = 'unigen:generate';
 

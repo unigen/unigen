@@ -33,6 +33,7 @@ class GeneratorFactory
     public function create(Config $config): Generator
     {
         return new Generator(
+            $config,
             $this->sutFactory,
             $this->rendererFactory->create($config)
         );
