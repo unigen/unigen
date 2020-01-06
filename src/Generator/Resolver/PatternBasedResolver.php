@@ -40,7 +40,7 @@ abstract class PatternBasedResolver
 
                 $match[$key] = array_key_exists($key, $match)
                     ? (int) $match[$key]
-                    : null;;
+                    : null;
             }
             $placeholders[] = $match;
         }
