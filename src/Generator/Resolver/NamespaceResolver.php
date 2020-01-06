@@ -71,7 +71,8 @@ class NamespaceResolver extends PatternBasedResolver
      */
     private function getPlaceholderReplacement(array $placeholder, array $namespaces): string
     {
-        switch ($placeholder['type']) {
+        $type = $placeholder['type'];
+        switch ($type) {
             case 'namespace':
                 $index = $placeholder['index'];
                 if ($index !== null) {
@@ -81,7 +82,7 @@ class NamespaceResolver extends PatternBasedResolver
                 return implode(self::NAMESPACE_SEPARATOR, $namespaces);
 
             default:
-                throw new PatternException(sprintf('Unknown namespace pattern "%s".', $placeholder['type']));
+                throw new PatternException(sprintf('Unknown "testNamespace" pattern "%s".', $type));
         }
     }
 }

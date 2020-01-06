@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace UniGen\Generator\Resolver;
 
-class PathResolver
+use UniGen\Generator\Exception\PatternException;
+
+class PathResolver extends PatternBasedResolver
 {
     /** @var string[] */
     private $patternParts;
@@ -13,7 +15,6 @@ class PathResolver
      */
     public function __construct(string $pattern)
     {
-        //    'tests/unit/<dirname(1,)>/<filename>Test.<extension>',
         $this->patternParts = explode('/', $pattern);
     }
 
@@ -21,12 +22,14 @@ class PathResolver
      * @param string $path
      *
      * @return string
+     *
+     * @throws PatternException
      */
     public function resolve(string $path): string
     {
-        $relativePath = substr(
+        $relativePath = mb_substr(
             $path,
-            strlen(getcwd()) + 1
+            mb_strlen(getcwd()) + 1
         );
         $pathInfo = pathinfo($relativePath);
 
@@ -36,66 +39,63 @@ class PathResolver
             'filename' => $pathInfo['filename']
         ];
 
-        $newPathParts = [];
+        $resolvedPatternsParts = [];
         foreach ($this->patternParts as $patternPart) {
-            $newPathParts[] = $this->resolvePart($patternPart, $replacements);
+            $resolvedPatternsParts[] = $this->resolvePatternPart($patternPart, $replacements);
         }
 
-        return implode(DIRECTORY_SEPARATOR, $newPathParts);
+        return implode(DIRECTORY_SEPARATOR, $resolvedPatternsParts);
     }
 
-    private function resolvePart(string $patternPart, array $replacements)
+    /**
+     * @param string $patternPart
+     * @param array<string, mixed> $replacements
+     *
+     * @return string
+     *
+     * @throws PatternException
+     */
+    private function resolvePatternPart(string $patternPart, array $replacements): string
     {
         if (!$this->patternHasPlaceholders($patternPart)) {
             return $patternPart;
         }
 
-        $matches = [];
-        preg_match_all('/<(?:(?<type>[^(>]+)(?:\((?<index>[0-9]+)(?:,(?<offset>[0-9]+))?\))?)>/', $patternPart, $matches, PREG_SET_ORDER);
-        foreach ($matches as $match) {
-            switch ($match['type']) {
-                case 'extension':
-                    $replacement = $replacements['extension'];
-                    break;
-
-                case 'filename':
-                    $replacement = $replacements['filename'];
-                    break;
-
-                case 'dirname':
-                    $dirnames = $replacements['dirnames'];
-                    $index = $match['index'] ?? null;
-                    $offset = $match['offset'] ?? null;
-                    if ($offset !== null) {
-                        $offset = (int) $offset;
-                    }
-
-                    if ($index !== null) {
-                        $dirnames = array_slice($dirnames, (int) $index, $offset);
-                    }
-
-                    $replacement = implode(DIRECTORY_SEPARATOR, $dirnames);
-                    break;
-
-                    // TODO
-                default:
-                    $replacement = 'xxx';
-            }
-
-            $patternPart = str_replace($match[0], $replacement, $patternPart);
+        foreach ($this->extractPlaceholders($patternPart) as $placeholder) {
+            $replacement = $this->getPlaceholderReplacement($placeholder, $replacements);
+            $patternPart = str_replace($placeholder[0], $replacement, $patternPart);
         }
-
-        // todo sprawdz czy nie ma brakujacych
 
         return $patternPart;
     }
 
-    private function patternHasPlaceholders(string $patternPart) : bool
+    /**
+     * @param array<string, mixed> $placeholder
+     * @param array<string, mixed> $replacements
+     *
+     * @return string
+     *
+     * @throws PatternException
+     */
+    private function getPlaceholderReplacement(array $placeholder, array $replacements): string
     {
-        $result = preg_match('/<(?:[^>]+)>/', $patternPart);
+        $type = $placeholder['type'];
+        switch ($type) {
+            case 'extension':
+            case 'filename':
+                return $replacements[$type];
 
-        return $result === 1
-            ? true
-            : false;
+            case 'dirname':
+                $dirnames = $replacements['dirnames'];
+                $index = $placeholder['index'];
+                if ($index !== null) {
+                    $dirnames = array_slice($dirnames, (int) $index, $placeholder['index']);
+                }
+
+                return implode(DIRECTORY_SEPARATOR, $dirnames);
+
+            default:
+                throw new PatternException(sprintf('Unknown "testPath" pattern "%s".', $type));
+        }
     }
 }
