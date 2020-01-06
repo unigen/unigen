@@ -1,0 +1,4 @@
+{
+  "main": "src/main.php",
+  "output": "bin/unigen"
+}

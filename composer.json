@@ -20,18 +20,20 @@
         "unit testing"
     ],
     "require": {
-        "php": ">=7.1",
-        "ext-json": "*",
-        "justinrainbow/json-schema": "^5.2",
-        "symfony/console": "^5.0",
-        "twig/twig": "^3.0"
+        "php": ">=7.1"
     },
-    "autoload": {
+    "autoload-dev": {
         "psr-4": {
             "UniGen\\": "src"
         }
     },
     "require-dev": {
-        "mikey179/vfsstream": "^1.0"
+        "ext-json": "*",
+        "justinrainbow/json-schema": "^5.2",
+        "symfony/console": "^5.0",
+        "twig/twig": "^3.0",
+        "mikey179/vfsstream": "^1.0",
+        "phpunit/phpunit": "^8.5",
+        "mockery/mockery": "^1.3"
     }
 }

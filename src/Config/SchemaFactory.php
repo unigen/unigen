@@ -17,7 +17,7 @@ class SchemaFactory
      */
     public function __construct(string $schemaDir)
     {
-        $this->schemaDir = realpath($schemaDir);
+        $this->schemaDir = $schemaDir;
     }
 
     /**
