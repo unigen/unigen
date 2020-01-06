@@ -77,6 +77,7 @@ class PathResolver
                     $replacement = implode(DIRECTORY_SEPARATOR, $dirnames);
                     break;
 
+                    // TODO
                 default:
                     $replacement = 'xxx';
             }
@@ -97,6 +98,4 @@ class PathResolver
             ? true
             : false;
     }
-
-
 }
