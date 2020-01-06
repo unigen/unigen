@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace UniGen\Generator\Resolver;
 
-use UniGen\Generator\Exception\PatternException;
+use UniGen\Generator\Exception\ResolverException;
 
 class NamespaceResolver extends PatternBasedResolver
 {
@@ -25,7 +25,7 @@ class NamespaceResolver extends PatternBasedResolver
      *
      * @return string
      *
-     * @throws PatternException
+     * @throws ResolverException
      */
     public function resolve(string $namespace): string
     {
@@ -45,7 +45,7 @@ class NamespaceResolver extends PatternBasedResolver
      *
      * @return string
      *
-     * @throws PatternException
+     * @throws ResolverException
      */
     private function resolvePatternPart(string $patternPart, array $namespaces): string
     {
@@ -67,7 +67,7 @@ class NamespaceResolver extends PatternBasedResolver
      *
      * @return string
      *
-     * @throws PatternException
+     * @throws ResolverException
      */
     private function getPlaceholderReplacement(array $placeholder, array $namespaces): string
     {
@@ -82,7 +82,7 @@ class NamespaceResolver extends PatternBasedResolver
                 return implode(self::NAMESPACE_SEPARATOR, $namespaces);
 
             default:
-                throw new PatternException(sprintf('Unknown "testNamespace" pattern "%s".', $type));
+                throw new ResolverException(sprintf('Unknown "testNamespace" pattern "%s".', $type));
         }
     }
 }

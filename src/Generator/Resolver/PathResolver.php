@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace UniGen\Generator\Resolver;
 
-use UniGen\Generator\Exception\PatternException;
+use UniGen\Generator\Exception\ResolverException;
 
 class PathResolver extends PatternBasedResolver
 {
@@ -23,7 +23,7 @@ class PathResolver extends PatternBasedResolver
      *
      * @return string
      *
-     * @throws PatternException
+     * @throws ResolverException
      */
     public function resolve(string $path): string
     {
@@ -53,7 +53,7 @@ class PathResolver extends PatternBasedResolver
      *
      * @return string
      *
-     * @throws PatternException
+     * @throws ResolverException
      */
     private function resolvePatternPart(string $patternPart, array $replacements): string
     {
@@ -75,7 +75,7 @@ class PathResolver extends PatternBasedResolver
      *
      * @return string
      *
-     * @throws PatternException
+     * @throws ResolverException
      */
     private function getPlaceholderReplacement(array $placeholder, array $replacements): string
     {
@@ -95,7 +95,7 @@ class PathResolver extends PatternBasedResolver
                 return implode(DIRECTORY_SEPARATOR, $dirnames);
 
             default:
-                throw new PatternException(sprintf('Unknown "testPath" pattern "%s".', $type));
+                throw new ResolverException(sprintf('Unknown "testPath" pattern "%s".', $type));
         }
     }
 }

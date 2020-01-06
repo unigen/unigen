@@ -5,6 +5,6 @@ namespace UniGen\Generator\Exception;
 
 use RuntimeException;
 
-class PatternException extends RuntimeException
+class ResolverException extends RuntimeException
 {
 }

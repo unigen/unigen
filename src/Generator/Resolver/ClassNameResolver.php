@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace UniGen\Generator\Resolver;
 
+use UniGen\Generator\Exception\ResolverException;
+use UniGen\Util\FileLoader\FileLoaderException;
 use UniGen\Util\FileLoader\PlainFileLoader;
 
 class ClassNameResolver
@@ -12,11 +14,21 @@ class ClassNameResolver
      * @param string $path
      *
      * @return string
+     *
+     * @throws ResolverException
      */
     public function resolveFromFile(string $path): string
     {
-        // TODO wrap exception
-        $content = PlainFileLoader::getContent($path);
+        try {
+            $content = PlainFileLoader::getContent($path);
+        } catch (FileLoaderException $exception) {
+            throw new ResolverException(
+                sprintf('Unable to load file content "%s".', $path),
+                0,
+                $exception
+            );
+        }
+
 
         return $this->resolve($content);
     }
@@ -25,14 +37,15 @@ class ClassNameResolver
      * @param string $content
      *
      * @return string
+     *
+     * @throws ResolverException
      */
     public function resolve(string $content): string
     {
         $tokens = token_get_all($content);
         $class = $this->extractClass($tokens);
         if ($class === null) {
-            // TODO
-           // throw new \RuntimeException('TODO');
+            throw new ResolverException('Unable to extract class name.');
         }
 
         $namespace = $this->extractNamespace($tokens);
