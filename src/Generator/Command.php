@@ -9,8 +9,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use UniGen\Config\ConfigFactory;
 use UniGen\Config\Exception\ConfigException;
-use UniGen\Config\Exception\SchemaException;
 use UniGen\Generator\Exception\TestGeneratorException;
+use UniGen\Renderer\RendererException;
+use UniGen\Sut\Exception\GeneratorException;
+use UniGen\Sut\Exception\SutException;
 
 class Command extends BaseCommand
 {
@@ -56,27 +58,14 @@ class Command extends BaseCommand
 
     /**
      * {@inheritdoc}
+     *
      * @throws TestGeneratorException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $sourceFileCollection = new SourceFileCollection($this->getSourceFiles($input));
-        // TODO noiwa metoda
-        if (!$sourceFileCollection->hasSome()) {
-            throw new TestGeneratorException(
-                'No source file(s).',
-                TestGeneratorException::CODE_NO_SOURCE_FILES
-            );
-        }
+        $this->validateSourceFileCollection($sourceFileCollection);
 
-        if ($sourceFileCollection->hasMissing()) {
-           throw new TestGeneratorException(
-               sprintf('Source files do not exist: %s', json_encode($sourceFileCollection->getMissing())),
-               TestGeneratorException::CODE_NO_EXISTING_SOURCE_FILES
-           );
-        }
-
-        // TODO --- nowa metoda
         $configPath = $this->getConfigFile($input);
         if ($configPath === null) {
             $output->writeln('No config file. Default configuration applied.');
@@ -87,28 +76,48 @@ class Command extends BaseCommand
                 ? $this->configFactory->createFromFile($configPath)
                 : $this->configFactory->createDefault();
         } catch (ConfigException $exception) {
-            // todo handle this better
-            throw new TestGeneratorException("TODO", 0 , $exception);
+            throw new TestGeneratorException('Unable to parse config file.', 0 , $exception);
         }
-        // TODO nowa metoda
 
-        try {
-            $generator = $this->generatorFactory->create($config);
-            foreach ($sourceFileCollection->getExisting() as $sourceFile) {
+        $generator = $this->generatorFactory->create($config);
+
+        foreach ($sourceFileCollection->getExisting() as $sourceFile) {
+            try {
                 $result = $generator->generate($sourceFile);
+            } catch (ConfigException |
+                GeneratorException |
+                RendererException |
+                SutException $exception) {
+                // FIXME do it better
+                throw new TestGeneratorException('Unsupported error', 999, $exception);
             }
-            $output->writeln("<info>Test file {$result->getTestPath()} has been generated successfully</info>");
-        } catch (GeneratorTestExistsException $exception) {
-            throw new TestGeneratorException(
-                sprintf('Test file "%s" already exists', $exception->getTestPath()),
-                TestGeneratorException::CODE_TEST_EXISTS,
-                $exception
-            );
         }
+        $output->writeln("<info>Test file {$result->getTestPath()} has been generated successfully</info>");
 
         return 0;
     }
 
+    /**
+     * @param SourceFileCollection $sourceFileCollection
+     *
+     * @throws TestGeneratorException
+     */
+    private function validateSourceFileCollection(SourceFileCollection $sourceFileCollection): void
+    {
+        if (!$sourceFileCollection->hasSome()) {
+            throw new TestGeneratorException(
+                'No source file(s).',
+                TestGeneratorException::CODE_NO_SOURCE_FILES
+            );
+        }
+
+        if ($sourceFileCollection->hasMissing()) {
+            throw new TestGeneratorException(
+                sprintf('Source files do not exist: %s', json_encode($sourceFileCollection->getMissing())),
+                TestGeneratorException::CODE_NO_EXISTING_SOURCE_FILES
+            );
+        }
+    }
 
     /**
      * @param InputInterface $input

@@ -7,5 +7,4 @@ use UniGen\Renderer\RendererException;
 
 class RenderException extends RendererException
 {
-
 }
