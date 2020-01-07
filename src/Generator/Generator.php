@@ -3,16 +3,24 @@
 namespace UniGen\Generator;
 
 use UniGen\Config\Config;
+use UniGen\Config\Exception\UnknownConfigKeyException;
+use UniGen\Generator\Exception\NoClassNameException;
+use UniGen\Generator\Exception\NoResolverSourceException;
+use UniGen\Generator\Exception\TestPersistException;
+use UniGen\Generator\Exception\UnknownResolverPatternException;
+use UniGen\Generator\Exception\WrongSutException;
 use UniGen\Generator\Resolver\ClassNameResolver;
 use UniGen\Generator\Resolver\NamespaceResolver;
 use UniGen\Generator\Resolver\PathResolver;
 use UniGen\Renderer\Context;
+use UniGen\Renderer\RendererException;
 use UniGen\Renderer\RendererInterface;
-use UniGen\Sut\Exception\GeneratorException;
+use UniGen\Sut\Exception\ClassNotExistException;
 use UniGen\Sut\SutFactory;
 use UniGen\Sut\SutInterface;
+use UniGen\Util\Exception\FileWriterException;
+use UniGen\Util\FileWriter;
 
-// TODO this class is doing too much
 class Generator
 {
     /** @var Config */
@@ -43,7 +51,15 @@ class Generator
      * @param string $sourceFile
      *
      * @return Result
-     * @throws GeneratorException
+     *
+     * @throws ClassNotExistException
+     * @throws UnknownResolverPatternException
+     * @throws WrongSutException
+     * @throws NoClassNameException
+     * @throws NoResolverSourceException
+     * @throws TestPersistException
+     * @throws UnknownConfigKeyException
+     * @throws RendererException
      */
     public function generate(string $sourceFile): Result
     {
@@ -51,15 +67,18 @@ class Generator
         (new SutValidator())->validate($sut);
 
         $testNamespace = (new NamespaceResolver($this->config->get('testNamespace')))->resolve($sut->getNamespace());
-
         $content = $this->renderer->render(new Context($sut, $testNamespace));
-
         $testPath = (new PathResolver($this->config->get('testPath')))->resolve($sourceFile);
-        // TODO move to FileWriter
 
-        mkdir(dirname($testPath), 0777, true);
-        file_put_contents($testPath, $content);
-
+        try {
+            (new FileWriter())->write($testPath, $content);
+        } catch (FileWriterException $exception) {
+            throw new TestPersistException(
+                'Unable to persist test file.',
+                0,
+                $exception
+            );
+        }
         return new Result($testPath);
     }
 
@@ -67,7 +86,10 @@ class Generator
      * @param string $path
      *
      * @return SutInterface
-     * @throws GeneratorException
+     *
+     * @throws NoClassNameException
+     * @throws NoResolverSourceException
+     * @throws ClassNotExistException
      */
     private function retrieveSut(string $path): SutInterface
     {

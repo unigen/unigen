@@ -5,6 +5,6 @@ namespace UniGen\Generator\Exception;
 
 use UniGen\Sut\Exception\GeneratorException;
 
-class TestAlreadyExistsException extends GeneratorException
+class TestPersistException extends GeneratorException
 {
 }
