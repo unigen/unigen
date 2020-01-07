@@ -5,6 +5,6 @@ namespace UniGen\Generator\Exception;
 
 use UniGen\Sut\Exception\GeneratorException;
 
-class MissingResolverSourceException extends GeneratorException
+class UnknownResolverPatternException extends GeneratorException
 {
 }

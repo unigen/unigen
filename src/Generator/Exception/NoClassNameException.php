@@ -5,6 +5,6 @@ namespace UniGen\Generator\Exception;
 
 use UniGen\Sut\Exception\GeneratorException;
 
-class ClassNameNotFoundException extends GeneratorException
+class NoClassNameException extends GeneratorException
 {
 }
