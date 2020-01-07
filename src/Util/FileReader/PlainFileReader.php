@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace UniGen\Util\FileReader;
 
+use UniGen\Util\Exception\FileReaderException;
+
 class PlainFileReader
 {
     /**

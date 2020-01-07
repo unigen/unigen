@@ -17,7 +17,7 @@ class NamespaceResolver extends PatternBasedResolver
      */
     public function __construct(string $pattern)
     {
-        $this->patternParts =  explode(self::NAMESPACE_SEPARATOR, $pattern);
+        $this->patternParts = explode(self::NAMESPACE_SEPARATOR, $pattern);
     }
 
     /**

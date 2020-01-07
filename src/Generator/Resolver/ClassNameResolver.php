@@ -6,7 +6,7 @@ namespace UniGen\Generator\Resolver;
 
 use UniGen\Generator\Exception\NoClassNameException;
 use UniGen\Generator\Exception\NoResolverSourceException;
-use UniGen\Util\FileReader\FileReaderException;
+use UniGen\Util\Exception\FileReaderException;
 use UniGen\Util\FileReader\PlainFileReader;
 
 class ClassNameResolver

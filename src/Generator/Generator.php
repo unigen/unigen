@@ -64,7 +64,6 @@ class Generator
     public function generate(string $sourceFile): Result
     {
         $sut = $this->retrieveSut($sourceFile);
-        (new SutValidator())->validate($sut);
 
         $testNamespace = (new NamespaceResolver($this->config->get('testNamespace')))->resolve($sut->getNamespace());
         $content = $this->renderer->render(new Context($sut, $testNamespace));
@@ -90,13 +89,14 @@ class Generator
      * @throws NoClassNameException
      * @throws NoResolverSourceException
      * @throws ClassNotExistException
+     * @throws WrongSutException
      */
     private function retrieveSut(string $path): SutInterface
     {
         $className = (new ClassNameResolver())->resolveFromFile($path);
 
         $sut = $this->sutFactory->create($className);
-        $this->validateSut($sut);
+        (new SutValidator())->validate($sut);
 
         return $sut;
     }
