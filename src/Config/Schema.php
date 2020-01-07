@@ -1,10 +1,10 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace UniGen\Config;
 
 use JsonSchema\Validator;
-use UniGen\Config\Exception\ConfigException;
+use UniGen\Config\Exception\InvalidConfigSchemaException;
 
 class Schema
 {
@@ -24,7 +24,7 @@ class Schema
     /**
      * @param array<string, mixed> $config
      *
-     * @throws ConfigException
+     * @throws InvalidConfigSchemaException
      */
     public function validate(array $config): void
     {
@@ -36,7 +36,7 @@ class Schema
         );
 
         if (!$validator->isValid()) {
-            $exception = new ConfigException('Invalid config schema.');
+            $exception = new InvalidConfigSchemaException('Invalid config schema.');
             $exception->setViolations($validator->getErrors());
 
             throw $exception;

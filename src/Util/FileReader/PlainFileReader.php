@@ -1,26 +1,26 @@
 <?php
 declare(strict_types=1);
 
-namespace UniGen\Util\FileLoader;
+namespace UniGen\Util\FileReader;
 
-class PlainFileLoader
+class PlainFileReader
 {
     /**
      * @param string $path
      *
      * @return string
      *
-     * @throws FileLoaderException
+     * @throws FileReaderException
      */
     public static function getContent(string $path): string
     {
         if (!file_exists($path)) {
-            throw new FileLoaderException(sprintf('File "%s" does not exist.', $path));
+            throw new FileReaderException(sprintf('File "%s" does not exist.', $path));
         }
 
         $content = file_get_contents($path);
         if ($path === false) {
-            throw new FileLoaderException(sprintf('Unable to fetch file content: "%s".', $path));
+            throw new FileReaderException(sprintf('Unable to fetch file content: "%s".', $path));
         }
 
         return $content;

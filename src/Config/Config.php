@@ -1,10 +1,10 @@
 <?php
-
 declare(strict_types=1);
 
 namespace UniGen\Config;
 
-use UniGen\Config\Exception\ConfigException;
+use UniGen\Config\Exception\InvalidConfigSchemaException;
+use UniGen\Config\Exception\UnknownConfigKeyException;
 
 class Config
 {
@@ -15,7 +15,7 @@ class Config
      * @param array<string, mixed> $parameters
      * @param Schema $schema
      *
-     * @throws ConfigException
+     * @throws InvalidConfigSchemaException
      */
     public function __construct(array $parameters, Schema $schema)
     {
@@ -28,12 +28,12 @@ class Config
      *
      * @return mixed
      *
-     * @throws ConfigException
+     * @throws UnknownConfigKeyException
      */
     public function get(string $key)
     {
         if (!$this->has($key)) {
-            throw new ConfigException(sprintf('Config key "%s" does not exist.', $key));
+            throw new UnknownConfigKeyException(sprintf('Config key "%s" does not exist.', $key));
         }
 
         return $this->parameters[$key];

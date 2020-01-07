@@ -9,9 +9,10 @@ use Twig\Error\Error;
 use Twig\Error\LoaderError;
 use Twig\Loader\FilesystemLoader;
 use UniGen\Config\Config;
-use UniGen\Config\Exception\ConfigException;
+use UniGen\Config\Exception\UnknownConfigKeyException;
 use UniGen\Renderer\Context;
-use UniGen\Renderer\RendererException;
+use UniGen\Renderer\Exception\RenderException;
+use UniGen\Renderer\Exception\TemplateLoadingException;
 use UniGen\Renderer\RendererInterface;
 
 class TwigRenderer implements RendererInterface
@@ -43,8 +44,8 @@ class TwigRenderer implements RendererInterface
     {
         try {
             $this->applyTemplatePath();
-        } catch (LoaderError | ConfigException $exception) {
-            throw new RendererException('An error occurred while set up renderer.', 0, $exception);
+        } catch (LoaderError | UnknownConfigKeyException $exception) {
+            throw new TemplateLoadingException('Unable to load template directory.', 0, $exception);
         }
 
         try {
@@ -56,8 +57,8 @@ class TwigRenderer implements RendererInterface
                     self::TEST_NAMESPACE => $context->getTestNamespace()
                 ]
             );
-        } catch (Error | ConfigException $exception) {
-            throw new RendererException('SUT render failed.', 0 , $exception);
+        } catch (Error | UnknownConfigKeyException $exception) {
+            throw new RenderException('SUT render failed.', 0 , $exception);
         }
 
         return $content;
@@ -65,7 +66,7 @@ class TwigRenderer implements RendererInterface
 
     /**
      * @throws LoaderError
-     * @throws ConfigException
+     * @throws UnknownConfigKeyException
      */
     private function applyTemplatePath(): void
     {

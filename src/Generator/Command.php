@@ -86,7 +86,7 @@ class Command extends BaseCommand
             $config = $configPath
                 ? $this->configFactory->createFromFile($configPath)
                 : $this->configFactory->createDefault();
-        } catch (ConfigException | SchemaException $exception) {
+        } catch (ConfigException $exception) {
             // todo handle this better
             throw new TestGeneratorException("TODO", 0 , $exception);
         }

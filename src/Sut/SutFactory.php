@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace UniGen\Sut;
 
 use ReflectionClass;
+use ReflectionException;
+use UniGen\Sut\Exception\ClassNotExistException;
 use UniGen\Sut\Reflection\ReflectionSutAdapter;
 
 class SutFactory
@@ -12,10 +14,19 @@ class SutFactory
      * @param string $class
      *
      * @return SutInterface
+     *
+     * @throws ClassNotExistException
      */
     public function create(string $class): SutInterface
     {
-        // TODO wrap exception
-        return new ReflectionSutAdapter(new ReflectionClass($class));
+        try {
+            return new ReflectionSutAdapter(new ReflectionClass($class));
+        } catch (ReflectionException $exception) {
+            throw new ClassNotExistException(
+                sprintf('Class "%s" do not exist.', $class),
+                0,
+                $exception
+            );
+        }
     }
 }
