@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace UniGen\Util\FileReader;
+namespace UniGen\Util\Exception;
 
 use Exception;
 

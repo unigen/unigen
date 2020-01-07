@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace UniGen\Config;
 
 use UniGen\Config\Exception\SchemaNotFoundException;
-use UniGen\Util\FileReader\FileReaderException;
+use UniGen\Util\Exception\FileReaderException;
 use UniGen\Util\FileReader\JsonFileReader;
 
 class SchemaFactory

@@ -48,6 +48,8 @@ class Generator
     public function generate(string $sourceFile): Result
     {
         $sut = $this->retrieveSut($sourceFile);
+        (new SutValidator())->validate($sut);
+
         $testNamespace = (new NamespaceResolver($this->config->get('testNamespace')))->resolve($sut->getNamespace());
 
         $content = $this->renderer->render(new Context($sut, $testNamespace));
@@ -59,27 +61,6 @@ class Generator
         file_put_contents($testPath, $content);
 
         return new Result($testPath);
-    }
-
-    /**
-     * TODO move to different vclass
-     * @param SutInterface $sut
-     *
-     * @throws GeneratorException
-     */
-    public function validateSut(SutInterface $sut)
-    {
-        if ($sut->isAbstract()) {
-            throw new GeneratorException(sprintf('SUT cannot be an abstract class "%s".', $sut->getName()));
-        }
-
-        if ($sut->isInterface()) {
-            throw new GeneratorException(sprintf('SUT cannot be an interface "%s".', $sut->getName()));
-        }
-
-        if ($sut->isTrait()) {
-            throw new GeneratorException(sprintf('SUT cannot be a trait "%s".', $sut->getName()));
-        }
     }
 
     /**
