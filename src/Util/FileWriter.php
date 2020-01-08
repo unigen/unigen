@@ -10,12 +10,13 @@ class FileWriter
     /**
      * @param string $path
      * @param string $content
+     * @param bool $override
      *
      * @throws FileWriterException
      */
-    public function write(string $path, string $content): void
+    public function write(string $path, string $content, bool $override): void
     {
-        if (file_exists($path)) {
+        if (!$override && file_exists($path)) {
             throw new FileWriterException(sprintf('File "%s" already exists.', $path));
         }
 
@@ -32,4 +33,5 @@ class FileWriter
             throw new FileWriterException(sprintf('Unable to save file "%s"', $path));
         }
     }
+
 }

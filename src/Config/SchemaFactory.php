@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace UniGen\Config;
 
-use UniGen\Config\Exception\SchemaNotFoundException;
+use UniGen\Config\Exception\ConfigException;
 use UniGen\Util\Exception\FileReaderException;
 use UniGen\Util\FileReader\JsonFileReader;
 
@@ -25,7 +25,7 @@ class SchemaFactory
      *
      * @return Schema
      *
-     * @throws SchemaNotFoundException
+     * @throws ConfigException
      */
     public function create(int $version): Schema
     {
@@ -34,7 +34,7 @@ class SchemaFactory
         try {
             $content = JsonFileReader::getContent($schemaPath);
         } catch (FileReaderException $exception) {
-            throw new SchemaNotFoundException(
+            throw new ConfigException(
                 sprintf('Unable to load schema version #%d.', $version),
                 0,
                 $exception
@@ -47,7 +47,7 @@ class SchemaFactory
     /**
      * @return Schema
      *
-     * @throws SchemaNotFoundException
+     * @throws ConfigException
      */
     public function createLatestSchema(): Schema
     {

@@ -6,6 +6,7 @@ namespace UniGen\Generator\Resolver;
 
 use UniGen\Generator\Exception\NoClassNameException;
 use UniGen\Generator\Exception\NoResolverSourceException;
+use UniGen\Sut\GeneratorException;
 use UniGen\Util\Exception\FileReaderException;
 use UniGen\Util\FileReader\PlainFileReader;
 
@@ -16,15 +17,14 @@ class ClassNameResolver
      *
      * @return string
      *
-     * @throws NoClassNameException
-     * @throws NoResolverSourceException
+     * @throws GeneratorException
      */
     public function resolveFromFile(string $path): string
     {
         try {
             $content = PlainFileReader::getContent($path);
         } catch (FileReaderException $exception) {
-            throw new NoResolverSourceException(
+            throw new GeneratorException(
                 sprintf('Unable to load file content "%s".', $path),
                 0,
                 $exception
@@ -39,14 +39,14 @@ class ClassNameResolver
      *
      * @return string
      *
-     * @throws NoClassNameException
+     * @throws GeneratorException
      */
     public function resolve(string $content): string
     {
         $tokens = token_get_all($content);
         $class = $this->extractClass($tokens);
         if ($class === null) {
-            throw new NoClassNameException('Unable to extract class name.');
+            throw new GeneratorException('Unable to extract class name.');
         }
 
         $namespace = $this->extractNamespace($tokens);

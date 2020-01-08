@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace UniGen\Config;
 
-use UniGen\Config\Exception\ConfigNotFoundException;
+use UniGen\Config\Exception\ConfigException;
 use UniGen\Config\Exception\InvalidConfigSchemaException;
-use UniGen\Config\Exception\SchemaNotFoundException;
 use UniGen\Util\Exception\FileReaderException;
 use UniGen\Util\FileReader\JsonFileReader;
 
@@ -25,8 +24,8 @@ class ConfigFactory
     /**
      * @return Config
      *
+     * @throws ConfigException
      * @throws InvalidConfigSchemaException
-     * @throws SchemaNotFoundException
      */
     public function createDefault(): Config
     {
@@ -56,16 +55,15 @@ class ConfigFactory
      *
      * @return Config
      *
-     * @throws ConfigNotFoundException
-     * @throws SchemaNotFoundException
      * @throws InvalidConfigSchemaException
+     * @throws ConfigException
      */
     public function createFromFile(string $configPath): Config
     {
         try {
             $content = JsonFileReader::getContent($configPath);
         } catch (FileReaderException $exception) {
-            throw new ConfigNotFoundException(
+            throw new ConfigException(
                 sprintf('Unable to load config "%s".', $configPath),
                 0,
                 $exception

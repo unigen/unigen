@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace UniGen\Generator;
 
-use UniGen\Generator\Exception\WrongSutException;
+use UniGen\Sut\GeneratorException;
 use UniGen\Sut\SutInterface;
 
 class SutValidator
@@ -11,20 +11,20 @@ class SutValidator
     /**
      * @param SutInterface $sut
      *
-     * @throws WrongSutException
+     * @throws GeneratorException
      */
     public function validate(SutInterface $sut)
     {
         if ($sut->isAbstract()) {
-            throw new WrongSutException(sprintf('SUT cannot be an abstract class "%s".', $sut->getName()));
+            throw new GeneratorException(sprintf('SUT cannot be an abstract class "%s".', $sut->getName()));
         }
 
         if ($sut->isInterface()) {
-            throw new WrongSutException(sprintf('SUT cannot be an interface "%s".', $sut->getName()));
+            throw new GeneratorException(sprintf('SUT cannot be an interface "%s".', $sut->getName()));
         }
 
         if ($sut->isTrait()) {
-            throw new WrongSutException(sprintf('SUT cannot be a trait "%s".', $sut->getName()));
+            throw new GeneratorException(sprintf('SUT cannot be a trait "%s".', $sut->getName()));
         }
     }
 }

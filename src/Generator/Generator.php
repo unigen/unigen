@@ -3,19 +3,15 @@
 namespace UniGen\Generator;
 
 use UniGen\Config\Config;
-use UniGen\Config\Exception\UnknownConfigKeyException;
-use UniGen\Generator\Exception\NoClassNameException;
-use UniGen\Generator\Exception\NoResolverSourceException;
-use UniGen\Generator\Exception\TestPersistException;
-use UniGen\Generator\Exception\UnknownResolverPatternException;
-use UniGen\Generator\Exception\WrongSutException;
+use UniGen\Config\Exception\ConfigException;
 use UniGen\Generator\Resolver\ClassNameResolver;
 use UniGen\Generator\Resolver\NamespaceResolver;
 use UniGen\Generator\Resolver\PathResolver;
 use UniGen\Renderer\Context;
 use UniGen\Renderer\RendererException;
 use UniGen\Renderer\RendererInterface;
-use UniGen\Sut\Exception\ClassNotExistException;
+use UniGen\Sut\GeneratorException;
+use UniGen\Sut\SutException;
 use UniGen\Sut\SutFactory;
 use UniGen\Sut\SutInterface;
 use UniGen\Util\Exception\FileWriterException;
@@ -37,11 +33,7 @@ class Generator
      * @param SutFactory $sutFactory
      * @param RendererInterface $renderer
      */
-    public function __construct(
-        Config $config,
-        SutFactory $sutFactory,
-        RendererInterface $renderer
-    ) {
+    public function __construct(Config $config, SutFactory $sutFactory, RendererInterface $renderer) {
         $this->sutFactory = $sutFactory;
         $this->renderer = $renderer;
         $this->config = $config;
@@ -49,19 +41,16 @@ class Generator
 
     /**
      * @param string $sourceFile
+     * @param bool $override
      *
      * @return Result
      *
-     * @throws ClassNotExistException
-     * @throws UnknownResolverPatternException
-     * @throws WrongSutException
-     * @throws NoClassNameException
-     * @throws NoResolverSourceException
-     * @throws TestPersistException
-     * @throws UnknownConfigKeyException
+     * @throws ConfigException
+     * @throws GeneratorException
      * @throws RendererException
+     * @throws SutException
      */
-    public function generate(string $sourceFile): Result
+    public function generate(string $sourceFile, bool $override): Result
     {
         $sut = $this->retrieveSut($sourceFile);
 
@@ -70,9 +59,9 @@ class Generator
         $testPath = (new PathResolver($this->config->get('testPath')))->resolve($sourceFile);
 
         try {
-            (new FileWriter())->write($testPath, $content);
+            (new FileWriter())->write($testPath, $content, $override);
         } catch (FileWriterException $exception) {
-            throw new TestPersistException(
+            throw new GeneratorException(
                 'Unable to persist test file.',
                 0,
                 $exception
@@ -86,10 +75,8 @@ class Generator
      *
      * @return SutInterface
      *
-     * @throws NoClassNameException
-     * @throws NoResolverSourceException
-     * @throws ClassNotExistException
-     * @throws WrongSutException
+     * @throws GeneratorException
+     * @throws SutException
      */
     private function retrieveSut(string $path): SutInterface
     {

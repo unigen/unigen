@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace UniGen\Config;
 
+use UniGen\Config\Exception\ConfigException;
 use UniGen\Config\Exception\InvalidConfigSchemaException;
-use UniGen\Config\Exception\UnknownConfigKeyException;
 
 class Config
 {
@@ -28,12 +28,12 @@ class Config
      *
      * @return mixed
      *
-     * @throws UnknownConfigKeyException
+     * @throws ConfigException
      */
     public function get(string $key)
     {
         if (!$this->has($key)) {
-            throw new UnknownConfigKeyException(sprintf('Config key "%s" does not exist.', $key));
+            throw new ConfigException(sprintf('Config key "%s" does not exist.', $key));
         }
 
         return $this->parameters[$key];
