@@ -23,7 +23,7 @@ class FileWriter
         $dir = dirname($path);
         if (!is_dir($dir)) {
             $dirCreated = mkdir($dir, 0777, true);
-            if ($dirCreated) {
+            if (!$dirCreated) {
                 throw new FileWriterException(sprintf('Can not create directory "%d".', $dir));
             }
         }
