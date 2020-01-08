@@ -12,7 +12,6 @@ use UniGen\Config\ConfigFactory;
 use UniGen\Config\Exception\ConfigException;
 use UniGen\Config\Exception\InvalidConfigSchemaException;
 use UniGen\Renderer\RendererException;
-use UniGen\Sut\GeneratorException;
 use UniGen\Sut\SutException;
 
 class GenerateCommand extends BaseCommand
@@ -59,8 +58,7 @@ class GenerateCommand extends BaseCommand
                 self::OPTION_OVERRIDE_FILE,
                 'o',
                 InputOption::VALUE_NONE,
-                'override test file if already exists',
-                false
+                'override test file if already exists'
             )
             ->addArgument(self::ARG_FILES, InputArgument::IS_ARRAY);
     }
@@ -127,7 +125,7 @@ class GenerateCommand extends BaseCommand
 
         if ($sourceFileCollection->hasMissing()) {
             throw new GeneratorException(
-                sprintf('Source files does not exist: %s', json_encode($sourceFileCollection->getMissing())),
+                sprintf('Source files does not exist: %s', json_encode($sourceFileCollection->getMissing()))
             );
         }
     }

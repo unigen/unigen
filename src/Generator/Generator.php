@@ -4,13 +4,13 @@ namespace UniGen\Generator;
 
 use UniGen\Config\Config;
 use UniGen\Config\Exception\ConfigException;
+use UniGen\Generator\GeneratorException;
 use UniGen\Generator\Resolver\ClassNameResolver;
 use UniGen\Generator\Resolver\NamespaceResolver;
 use UniGen\Generator\Resolver\PathResolver;
 use UniGen\Renderer\Context;
 use UniGen\Renderer\RendererException;
 use UniGen\Renderer\RendererInterface;
-use UniGen\Sut\GeneratorException;
 use UniGen\Sut\SutException;
 use UniGen\Sut\SutFactory;
 use UniGen\Sut\SutInterface;

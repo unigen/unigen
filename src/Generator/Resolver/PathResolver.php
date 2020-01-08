@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace UniGen\Generator\Resolver;
 
-use UniGen\Sut\GeneratorException;
+use UniGen\Generator\GeneratorException;
 
 class PathResolver extends PatternBasedResolver
 {

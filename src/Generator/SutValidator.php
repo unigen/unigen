@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace UniGen\Generator;
 
-use UniGen\Sut\GeneratorException;
+use UniGen\Generator\GeneratorException;
 use UniGen\Sut\SutInterface;
 
 class SutValidator
