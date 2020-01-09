@@ -7,10 +7,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use UniGen\Config\ConfigFactory;
 use UniGen\Config\Exception\ConfigException;
 use UniGen\Config\Exception\InvalidConfigSchemaException;
+use UniGen\Generator\Exception\GenerateCommandException;
 use UniGen\Generator\Exception\GeneratorException;
 use UniGen\Generator\Exception\MissingSourceFileException;
 use UniGen\Renderer\RendererException;
@@ -67,16 +67,16 @@ class GenerateCommand extends BaseCommand
 
     /**
      * {@inheritdoc}
+     *
+     * @throws GenerateCommandException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $io = new SymfonyStyle($input, $output);
-
         $sourceFileCollection = new SourceFileCollection($this->getSourceFiles($input));
         try {
             $this->validateSourceFileCollection($sourceFileCollection);
         } catch (GeneratorException $exception) {
-            return $this->handleGeneratorException($exception, $io);
+            throw $this->handleGeneratorException($exception);
         }
 
         $configPath = $this->getConfigFile($input);
@@ -89,7 +89,7 @@ class GenerateCommand extends BaseCommand
                 ? $this->configFactory->createFromFile($configPath)
                 : $this->configFactory->createDefault();
         } catch (ConfigException $exception) {
-            return $this->handleConfigException($exception, $io);
+            throw $this->handleConfigException($exception);
         }
 
         try {
@@ -102,13 +102,13 @@ class GenerateCommand extends BaseCommand
                 );
             }
         } catch (ConfigException $exception) {
-            return $this->handleConfigException($exception, $io);
+            throw $this->handleConfigException($exception);
         } catch (GeneratorException $exception) {
-            return $this->handleGeneratorException($exception, $io);
+            throw $this->handleGeneratorException($exception);
         } catch (RendererException $exception) {
-            return $this->handleRendererException($exception, $io);
+            throw $this->handleRendererException($exception);
         } catch (SutException $exception) {
-            return $this->handleSutException($exception, $io);
+            throw $this->handleSutException($exception);
         }
 
         return 0;
@@ -178,56 +178,73 @@ class GenerateCommand extends BaseCommand
 
     /**
      * @param GeneratorException $exception
-     * @param SymfonyStyle $io
      *
-     * @return int
+     * @return GenerateCommandException
      */
-    private function handleGeneratorException(GeneratorException $exception, SymfonyStyle $io): int
+    private function handleGeneratorException(GeneratorException $exception): GenerateCommandException
     {
-        $io->error($exception->getMessage());
+        $message = $exception->getMessage();
+        if ($exception instanceof MissingSourceFileException) {
+            $message = $this->createConsoleList(
+                'The following source file(s) does not exists.',
+                $exception->getMissingFiles()
+            );
+        }
 
-        return 1;
+        return new GenerateCommandException($message, 1, $exception);
     }
 
     /**
      * @param ConfigException $exception
-     * @param SymfonyStyle $io
      *
-     * @return int
+     * @return GenerateCommandException
      */
-    private function handleConfigException(ConfigException $exception, SymfonyStyle $io): int
+    private function handleConfigException(ConfigException $exception): GenerateCommandException
     {
-        $io->error($exception->getMessage());
+        $message = $exception->getMessage();
         if ($exception instanceof InvalidConfigSchemaException) {
-            $io->listing($exception->getViolations());
+            $message = $this->createConsoleList(
+                'Invalid config schema. Please fix the following violations.',
+                $exception->getViolations()
+            );
         }
 
-        return 2;
+        return new GenerateCommandException($message, 2, $exception);
     }
 
     /**
      * @param RendererException $exception
      *
-     * @param SymfonyStyle $io
-     * @return int
+     * @return GenerateCommandException
      */
-    private function handleRendererException(RendererException $exception, SymfonyStyle $io): int
+    private function handleRendererException(RendererException $exception): GenerateCommandException
     {
-        $io->error($exception->getMessage());
-
-        return 3;
+        return new GenerateCommandException($exception->getMessage(), 3, $exception);
     }
 
     /**
      * @param SutException $exception
      *
-     * @param SymfonyStyle $io
-     * @return int
+     * @return GenerateCommandException
      */
-    private function handleSutException(SutException $exception, SymfonyStyle $io): int
+    private function handleSutException(SutException $exception): GenerateCommandException
     {
-        $io->error($exception->getMessage());
+        return new GenerateCommandException($exception->getMessage(), 4, $exception);
+    }
 
-        return 4;
+    /**
+     * @param string $header
+     * @param string[] $elements
+     *
+     * @return string
+     */
+    private function createConsoleList(string $header, array $elements): string
+    {
+        $lines = [$header];
+        foreach ($elements as $element) {
+            $lines[] = '> ' . $element;
+        }
+
+        return implode("\n", $lines);
     }
 }
