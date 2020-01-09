@@ -64,7 +64,7 @@ class ConfigFactory
             $content = JsonFileReader::getContent($configPath);
         } catch (FileReaderException $exception) {
             throw new ConfigException(
-                sprintf('Unable to load config "%s".', $configPath),
+                sprintf('Unable to load config file "%s".', $configPath),
                 0,
                 $exception
             );

@@ -124,6 +124,7 @@ class GenerateCommand extends BaseCommand
         }
 
         if ($sourceFileCollection->hasMissing()) {
+            // TODO
             throw new GeneratorException(
                 sprintf('Source files does not exist: %s', json_encode($sourceFileCollection->getMissing()))
             );

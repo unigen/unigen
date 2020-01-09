@@ -61,7 +61,7 @@ class Generator
             (new FileWriter())->write($testPath, $content, $override);
         } catch (FileWriterException $exception) {
             throw new GeneratorException(
-                'Unable to persist test file.',
+                sprintf('Unable to persist test file "%s".', $testPath),
                 0,
                 $exception
             );
