@@ -11,6 +11,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use UniGen\Config\ConfigFactory;
 use UniGen\Config\Exception\ConfigException;
 use UniGen\Config\Exception\InvalidConfigSchemaException;
+use UniGen\Generator\Exception\GeneratorException;
+use UniGen\Generator\Exception\MissingSourceFileException;
 use UniGen\Renderer\RendererException;
 use UniGen\Sut\SutException;
 
@@ -116,6 +118,7 @@ class GenerateCommand extends BaseCommand
      * @param SourceFileCollection $sourceFileCollection
      *
      * @throws GeneratorException
+     * @throws MissingSourceFileException
      */
     private function validateSourceFileCollection(SourceFileCollection $sourceFileCollection): void
     {
@@ -124,10 +127,10 @@ class GenerateCommand extends BaseCommand
         }
 
         if ($sourceFileCollection->hasMissing()) {
-            // TODO
-            throw new GeneratorException(
-                sprintf('Source files does not exist: %s', json_encode($sourceFileCollection->getMissing()))
-            );
+            $exception = new MissingSourceFileException('Source files does not exist.');
+            $exception->setMissingFiles($sourceFileCollection->getMissing());
+
+            throw $exception;
         }
     }
 

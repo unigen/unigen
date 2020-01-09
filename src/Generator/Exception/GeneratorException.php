@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace UniGen\Generator;
+namespace UniGen\Generator\Exception;
 
 use Exception;
 
