@@ -15,7 +15,7 @@ unit: ## Launch PHPUnit unit tests
 
 .PHONY: build
 build: ## Build bin/unigen
-	@vendor/bin/box
+	@vendor/bin/box build
 
 .PHONY: lint
 lint: ## Lint source files
