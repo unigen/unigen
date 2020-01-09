@@ -24,13 +24,13 @@ class FileWriter
         if (!is_dir($dir)) {
             $dirCreated = mkdir($dir, 0777, true);
             if (!$dirCreated) {
-                throw new FileWriterException(sprintf('Can not create directory "%d".', $dir));
+                throw new FileWriterException(sprintf('Can\'t create directory "%d".', $dir));
             }
         }
 
         $fileCreated = file_put_contents($path, $content);
         if (!$fileCreated) {
-            throw new FileWriterException(sprintf('Unable to save file "%s"', $path));
+            throw new FileWriterException(sprintf('Unable to save file "%s".', $path));
         }
     }
 

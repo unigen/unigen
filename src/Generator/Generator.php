@@ -4,7 +4,6 @@ namespace UniGen\Generator;
 
 use UniGen\Config\Config;
 use UniGen\Config\Exception\ConfigException;
-use UniGen\Generator\GeneratorException;
 use UniGen\Generator\Resolver\ClassNameResolver;
 use UniGen\Generator\Resolver\NamespaceResolver;
 use UniGen\Generator\Resolver\PathResolver;

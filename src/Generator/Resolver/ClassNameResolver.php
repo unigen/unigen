@@ -1,11 +1,8 @@
 <?php
-
 declare(strict_types=1);
 
 namespace UniGen\Generator\Resolver;
 
-use UniGen\Generator\Exception\NoClassNameException;
-use UniGen\Generator\Exception\NoResolverSourceException;
 use UniGen\Generator\GeneratorException;
 use UniGen\Util\Exception\FileReaderException;
 use UniGen\Util\FileReader\PlainFileReader;
