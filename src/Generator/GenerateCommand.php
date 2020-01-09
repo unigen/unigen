@@ -81,7 +81,10 @@ class GenerateCommand extends BaseCommand
 
         $configPath = $this->getConfigFile($input);
         if ($configPath === null) {
-            $output->writeln('No config file. Default configuration applied.');
+            $output->writeln($configPath === null
+                ? '<info>No config file. Default configuration applied.</info>'
+                : sprintf('Using config file "%s".', $configPath)
+            );
         }
 
         try {
@@ -186,12 +189,12 @@ class GenerateCommand extends BaseCommand
         $message = $exception->getMessage();
         if ($exception instanceof MissingSourceFileException) {
             $message = $this->createConsoleList(
-                'The following source file(s) does not exists.',
+                'The following source file(s) does not exists:',
                 $exception->getMissingFiles()
             );
         }
 
-        return new GenerateCommandException($message, 1, $exception);
+        return new GenerateCommandException($message, 1);
     }
 
     /**
@@ -204,12 +207,12 @@ class GenerateCommand extends BaseCommand
         $message = $exception->getMessage();
         if ($exception instanceof InvalidConfigSchemaException) {
             $message = $this->createConsoleList(
-                'Invalid config schema. Please fix the following violations.',
+                'Invalid config schema. Please fix the following violations:',
                 $exception->getViolations()
             );
         }
 
-        return new GenerateCommandException($message, 2, $exception);
+        return new GenerateCommandException($message, 2);
     }
 
     /**
@@ -219,7 +222,7 @@ class GenerateCommand extends BaseCommand
      */
     private function handleRendererException(RendererException $exception): GenerateCommandException
     {
-        return new GenerateCommandException($exception->getMessage(), 3, $exception);
+        return new GenerateCommandException($exception->getMessage(), 3);
     }
 
     /**
@@ -229,7 +232,7 @@ class GenerateCommand extends BaseCommand
      */
     private function handleSutException(SutException $exception): GenerateCommandException
     {
-        return new GenerateCommandException($exception->getMessage(), 4, $exception);
+        return new GenerateCommandException($exception->getMessage(), 4);
     }
 
     /**
