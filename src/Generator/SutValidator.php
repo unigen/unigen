@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace UniGen\Generator;
 
-use UniGen\Generator\GeneratorException;
 use UniGen\Sut\SutInterface;
 
 class SutValidator
@@ -13,7 +12,7 @@ class SutValidator
      *
      * @throws GeneratorException
      */
-    public function validate(SutInterface $sut)
+    public function validate(SutInterface $sut): void
     {
         if ($sut->isAbstract()) {
             throw new GeneratorException(sprintf('SUT cannot be an abstract class "%s".', $sut->getName()));

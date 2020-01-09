@@ -1,0 +1,7 @@
+parameters:
+  level: 7
+  paths:
+    - src
+  checkGenericClassInNonGenericObjectType: false
+  ignoreErrors:
+    - '/Parameter #1 $argument of class ReflectionClass constructor expects class-string<T of object>|T of object, string given\./'

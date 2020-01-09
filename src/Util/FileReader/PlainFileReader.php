@@ -21,7 +21,7 @@ class PlainFileReader
         }
 
         $content = file_get_contents($path);
-        if ($path === false) {
+        if ($content === false) {
             throw new FileReaderException(sprintf('Unable to fetch file content: "%s".', $path));
         }
 

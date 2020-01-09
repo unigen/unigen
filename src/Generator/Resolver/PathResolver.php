@@ -27,15 +27,20 @@ class PathResolver extends PatternBasedResolver
      */
     public function resolve(string $path): string
     {
+        $cwd = getcwd();
+        if ($cwd === false) {
+            throw new GeneratorException('Unable to determine current working directory.');
+        }
+
         $relativePath = mb_substr(
             $path,
-            mb_strlen(getcwd()) + 1
+            mb_strlen($cwd) + 1
         );
         $pathInfo = pathinfo($relativePath);
 
         $replacements = [
             'dirnames' => explode(DIRECTORY_SEPARATOR, $pathInfo['dirname']),
-            'extension' => $pathInfo['extension'],
+            'extension' => $pathInfo['extension'] ?? '',
             'filename' => $pathInfo['filename']
         ];
 

@@ -82,7 +82,10 @@ class ReflectionSutAdapter implements SutInterface
      */
     public function getPath(): string
     {
-        return $this->reflection->getFileName();
+        /** @var string $filename */
+        $filename = $this->reflection->getFileName();
+
+        return  $filename;
     }
 
     /**

@@ -43,7 +43,7 @@ class GenerateCommand extends BaseCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName(self::NAME)
@@ -94,6 +94,10 @@ class GenerateCommand extends BaseCommand
             $generator = $this->generatorFactory->create($config);
             foreach ($sourceFileCollection->getExisting() as $sourceFile) {
                 $result = $generator->generate($sourceFile, $this->getOverrideFlag($input));
+
+                $output->writeln(
+                    sprintf('<info>Test file "%s" has been generated successfully</info>', $result->getTestPath())
+                );
             }
         } catch (ConfigException $exception) {
             return $this->handleConfigException($exception, $io);
@@ -104,10 +108,6 @@ class GenerateCommand extends BaseCommand
         } catch (SutException $exception) {
             return $this->handleSutException($exception, $io);
         }
-
-        $output->writeln(
-            sprintf('<info>Test file "%s" has been generated successfully</info>', $result->getTestPath())
-        );
 
         return 0;
     }
@@ -137,6 +137,7 @@ class GenerateCommand extends BaseCommand
      */
     private function getConfigFile(InputInterface $input): ?string
     {
+        /** @var string $configParam */
         $configParam = $input->getOption(self::OPTION_CONFIG_FILE);
         $configPath = realpath($configParam);
 
@@ -152,17 +153,23 @@ class GenerateCommand extends BaseCommand
      */
     private function getSourceFiles(InputInterface $input): array
     {
-        return $input->getArgument(self::ARG_FILES);
+        /** @var string[] $sourceFiles */
+        $sourceFiles = $input->getArgument(self::ARG_FILES);
+
+        return $sourceFiles;
     }
 
     /**
      * @param InputInterface $input
      *
-     * @return string[]
+     * @return bool
      */
     private function getOverrideFlag(InputInterface $input): bool
     {
-        return $input->getOption(self::OPTION_OVERRIDE_FILE);
+        /** @var bool $override */
+        $override = $input->getOption(self::OPTION_OVERRIDE_FILE);
+
+        return $override;
     }
 
     /**

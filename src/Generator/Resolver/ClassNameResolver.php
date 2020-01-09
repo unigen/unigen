@@ -57,7 +57,7 @@ class ClassNameResolver
     }
 
     /**
-     * @param array[] $tokens
+     * @param array<int, mixed> $tokens
      *
      * @return string|null
      */
@@ -77,7 +77,7 @@ class ClassNameResolver
     }
 
     /**
-     * @param array[] $tokens
+     * @param array<int, mixed> $tokens
      *
      * @return string|null
      */

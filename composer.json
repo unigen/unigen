@@ -20,7 +20,8 @@
         "unit testing"
     ],
     "require": {
-        "php": ">=7.1"
+        "php": ">=7.1",
+        "phpstan/phpstan": "^0.12.4"
     },
     "autoload-dev": {
         "psr-4": {

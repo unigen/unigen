@@ -14,7 +14,7 @@ class Schema
     private $schema;
 
     /**
-     * @param array $schema
+     * @param array<mixed, mixed> $schema
      */
     public function __construct(array $schema)
     {
