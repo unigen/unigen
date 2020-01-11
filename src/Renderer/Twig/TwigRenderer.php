@@ -27,7 +27,7 @@ class TwigRenderer implements RendererInterface
 
     /**
      * @param Environment $twig
-     * @param Config           $config
+     * @param Config $config
      */
     public function __construct(Environment $twig, Config $config)
     {
