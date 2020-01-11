@@ -211,9 +211,14 @@ class GenerateCommand extends BaseCommand
     {
         $message = $exception->getMessage();
         if ($exception instanceof InvalidConfigSchemaException) {
+            $violationList = [];
+            foreach ($exception->getViolations() as $violation) {
+                $violationList[] = sprintf('[%s] %s', $violation['property'], $violation['message']);
+            }
+
             $message = $this->createConsoleList(
                 'Invalid config schema. Please fix the following violations:',
-                $exception->getViolations()
+                $violationList
             );
         }
 

@@ -46,7 +46,7 @@ class ConfigFactory
             'testNamespace' => 'Test\Unit\<namespace>',
             'testCaseClass' => '\PHPUnit\Framework\TestCase',
             'mockFramework' => 'mockery',
-            'template' => realpath(__DIR__ . '/../Resources/views/sut_template.php.twig')
+            'template' => __DIR__ . '/../Resources/views/sut_template.php.twig'
         ];
     }
 

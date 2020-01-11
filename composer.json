@@ -18,7 +18,7 @@
         "phpunit",
         "unit testing"
     ],
-    "autoload-dev": {
+    "autoload": {
         "psr-4": {
             "UniGen\\": "src"
         }
