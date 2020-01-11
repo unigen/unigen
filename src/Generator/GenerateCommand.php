@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use UniGen\Config\ConfigFactory;
 use UniGen\Config\Exception\ConfigException;
 use UniGen\Config\Exception\InvalidConfigSchemaException;
@@ -72,11 +73,13 @@ class GenerateCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $isVerbose = (new SymfonyStyle($input, $output))->isVerbose();
+
         $sourceFileCollection = new SourceFileCollection($this->getSourceFiles($input));
         try {
             $this->validateSourceFileCollection($sourceFileCollection);
         } catch (GeneratorException $exception) {
-            throw $this->handleGeneratorException($exception);
+            throw $this->handleGeneratorException($exception, $isVerbose);
         }
 
         $configPath = $this->getConfigFile($input);
@@ -92,7 +95,7 @@ class GenerateCommand extends BaseCommand
                 ? $this->configFactory->createFromFile($configPath)
                 : $this->configFactory->createDefault();
         } catch (ConfigException $exception) {
-            throw $this->handleConfigException($exception);
+            throw $this->handleConfigException($exception, $isVerbose);
         }
 
         try {
@@ -105,13 +108,13 @@ class GenerateCommand extends BaseCommand
                 );
             }
         } catch (ConfigException $exception) {
-            throw $this->handleConfigException($exception);
+            throw $this->handleConfigException($exception, $isVerbose);
         } catch (GeneratorException $exception) {
-            throw $this->handleGeneratorException($exception);
+            throw $this->handleGeneratorException($exception, $isVerbose);
         } catch (RendererException $exception) {
-            throw $this->handleRendererException($exception);
+            throw $this->handleRendererException($exception, $isVerbose);
         } catch (SutException $exception) {
-            throw $this->handleSutException($exception);
+            throw $this->handleSutException($exception, $isVerbose);
         }
 
         return 0;
@@ -181,10 +184,11 @@ class GenerateCommand extends BaseCommand
 
     /**
      * @param GeneratorException $exception
+     * @param bool $isVerbose
      *
      * @return GenerateCommandException
      */
-    private function handleGeneratorException(GeneratorException $exception): GenerateCommandException
+    private function handleGeneratorException(GeneratorException $exception, bool $isVerbose): GenerateCommandException
     {
         $message = $exception->getMessage();
         if ($exception instanceof MissingSourceFileException) {
@@ -194,15 +198,16 @@ class GenerateCommand extends BaseCommand
             );
         }
 
-        return new GenerateCommandException($message, 1);
+        return new GenerateCommandException($message, 1, $isVerbose ? $exception : null);
     }
 
     /**
      * @param ConfigException $exception
+     * @param bool $isVerbose
      *
      * @return GenerateCommandException
      */
-    private function handleConfigException(ConfigException $exception): GenerateCommandException
+    private function handleConfigException(ConfigException $exception, bool $isVerbose): GenerateCommandException
     {
         $message = $exception->getMessage();
         if ($exception instanceof InvalidConfigSchemaException) {
@@ -212,27 +217,29 @@ class GenerateCommand extends BaseCommand
             );
         }
 
-        return new GenerateCommandException($message, 2);
+        return new GenerateCommandException($message, 2, $isVerbose ? $exception : null);
     }
 
     /**
      * @param RendererException $exception
+     * @param bool $isVerbose
      *
      * @return GenerateCommandException
      */
-    private function handleRendererException(RendererException $exception): GenerateCommandException
+    private function handleRendererException(RendererException $exception, bool $isVerbose): GenerateCommandException
     {
-        return new GenerateCommandException($exception->getMessage(), 3);
+        return new GenerateCommandException($exception->getMessage(), 3, $isVerbose ? $exception : null);
     }
 
     /**
      * @param SutException $exception
+     * @param bool $isVerbose
      *
      * @return GenerateCommandException
      */
-    private function handleSutException(SutException $exception): GenerateCommandException
+    private function handleSutException(SutException $exception, bool $isVerbose): GenerateCommandException
     {
-        return new GenerateCommandException($exception->getMessage(), 4);
+        return new GenerateCommandException($exception->getMessage(), 4, $isVerbose ? $exception : null);
     }
 
     /**

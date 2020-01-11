@@ -9,13 +9,12 @@ use {{ dependency.getType }};
 {% endif %}
 {% endfor %}
 {% if config.get('mockFramework') == 'phpunit' and sut.hasDependencies %}
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject
 {% elseif config.get('mockFramework') == 'mockery' and sut.hasDependencies %}
 use Mockery;
 use Mockery\MockInterface as MockObject;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 {% endif %}
-use PHPUnit\Framework\TestCase;
 use {{ sut.getName }};
 
 final class {{ sut.getShortName }}Test extends {{ config.get('testCaseClass') }}

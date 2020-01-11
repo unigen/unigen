@@ -9,11 +9,11 @@
       "type": "number"
     },
     "testPath": {
-      "description": "TODO",
+      "description": "Where to save generated test file based on source file path",
       "type": "string"
     },
     "testNamespace": {
-      "description": "TODO",
+      "description": "How to build namespace based on source file namespace",
       "type": "string"
     },
     "testCaseClass": {
@@ -27,10 +27,6 @@
     },
     "template": {
       "description": "Template used to generate test",
-      "type": "string"
-    },
-    "templateDir": {
-      "description": "Twig templates directory",
       "type": "string"
     }
   },

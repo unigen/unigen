@@ -44,7 +44,7 @@ class ConfigFactory
             'version' => Schema::LATEST_VERSION,
             'testPath' => 'tests/unit/<dirname(1)>/<filename>Test.<extension>',
             'testNamespace' => 'Test\Unit\<namespace>',
-            'testCaseClass' => 'TestCase',
+            'testCaseClass' => '\PHPUnit\Framework\TestCase',
             'mockFramework' => 'mockery',
             'template' => realpath(__DIR__ . '/../Resources/views/sut_template.php.twig')
         ];
