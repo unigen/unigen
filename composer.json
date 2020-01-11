@@ -1,5 +1,5 @@
 {
-    "name": "unigen/unigen",
+    "name": "unigen/unigen-src",
     "type": "library",
     "description": "UniGen is a unit test generator for PHP. It automatically generates unit tests for your classes.",
     "license": "MIT",
@@ -13,25 +13,24 @@
             "email": "klak.maciej@gmail.com"
         }
     ],
-    "bin": ["bin/unigen"],
     "keywords": [
         "mockery",
         "phpunit",
         "unit testing"
     ],
-    "require": {
-        "php": ">=7.1"
-    },
     "autoload-dev": {
         "psr-4": {
             "UniGen\\": "src"
         }
     },
-    "require-dev": {
-        "ext-json": "*",
+    "require": {
+        "php": ">=7.1",
+        "ext-json": "^1.6",
         "justinrainbow/json-schema": "^5.2",
-        "symfony/console": "^5.0",
         "twig/twig": "^3.0",
+        "symfony/console": "^5.0"
+    },
+    "require-dev": {
         "mikey179/vfsstream": "^1.0",
         "phpunit/phpunit": "^8.5",
         "mockery/mockery": "^1.3",
