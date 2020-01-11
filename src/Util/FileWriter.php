@@ -33,5 +33,4 @@ class FileWriter
             throw new FileWriterException(sprintf('Unable to save file "%s".', $path));
         }
     }
-
 }
