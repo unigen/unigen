@@ -7,6 +7,7 @@ use League\Plates\Engine;
 use UniGen\Config\Config;
 use UniGen\Renderer\Context;
 use UniGen\Renderer\RendererInterface;
+use UniGen\Renderer\ScalarValueMapper;
 
 class PlatesRenderer implements RendererInterface
 {
@@ -19,7 +20,9 @@ class PlatesRenderer implements RendererInterface
     public function __construct(Config $config)
     {
         $this->config = $config;
+        // TODO to method
         $this->engine = new Engine(dirname($this->config->get('template')), 'phtml');
+        $this->engine->loadExtension(new ScalarValueMapperExtension(new ScalarValueMapper()));
     }
 
     /**

@@ -52,7 +52,7 @@ final class <?= $sut->getShortName(); ?>Test extends <?= $config->get('testCaseC
 <?php endif; ?>
 <?php else: ?>
 <?php // TODO scalar filter - bez sensu ?>
-        $this-><?= $dependency->getName(); ?> = <?= $dependency->getValue(); ?>;
+        $this-><?= $dependency->getName(); ?> = <?= $this->scalar($dependency->getValue()); ?>;
 <?php endif; ?>
 <?php endforeach; ?>
 <?php if ($sut->hasDependencies()): ?>
