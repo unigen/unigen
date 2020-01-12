@@ -1,0 +1,78 @@
+<?php
+/**
+ * @var $context \UniGen\Renderer\Context
+ */
+$sut = $context->getSut();
+$config = $context->getConfig();
+?>
+<?= "<?php\n" ?>
+<?php if($sut->hasNamespace()): ?>
+namespace <?= $context->getTestNamespace(); ?>;
+<?= "\n"?>
+<?php endif;?>
+<?php foreach ($sut->getDependencies() as $dependency): ?>
+<?php if ($dependency->isObject()): ?>
+use <?= $dependency->getType(); ?>;
+<?php endif; ?>
+<?php endforeach; ?>
+<?php if ($config->get('mockFramework') === 'phpunit' && $sut->hasDependencies()): ?>
+use PHPUnit\Framework\MockObject\MockObject;
+<?php elseif ($config->get('mockFramework') === 'mockery' && $sut->hasDependencies()): ?>
+use Mockery;
+use Mockery\MockInterface as MockObject;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+<?php endif; ?>
+use <?= $sut->getName() ?>;
+
+final class <?= $sut->getShortName(); ?>Test extends <?= $config->get('testCaseClass'); ?><?= "\n"; ?>
+{
+<?php if ($config->get('mockFramework') === 'mockery' && $sut->hasDependencies()): ?>
+    use MockeryPHPUnitIntegration;
+    <?= "\n"; ?>
+<?php endif; ?>
+<?php foreach ($sut->getDependencies() as $dependency): ?>
+    /** @var <?= $dependency->getShortName(); ?><?php if ($dependency->isObject()): ?>|MockObject<?php endif; ?> */
+    private $<?= $dependency->getName(); ?><?php if ($dependency->isObject()): ?>Mock<?php endif; ?>;
+
+<?php endforeach; ?>
+    /** @var <?= $sut->getShortName(); ?> */
+    private $sut;
+
+    /**
+     * {@inheritdoc}
+    */
+    public function setUp()
+    {
+<?php foreach($sut->getDependencies() as $dependency): ?>
+<?php if ($dependency->isObject()): ?>
+<?php if ($config->get('mockFramework') === 'phpunit'): ?>
+        $this-><?= $dependency->getName(); ?>Mock = $this->createMock(<?= $dependency->getShortName(); ?>::class);
+<?php else: ?>
+        $this-><?= $dependency->getName(); ?>Mock = Mockery::mock(<?= $dependency->getShortName(); ?>::class);
+<?php endif; ?>
+<?php else: ?>
+<?php // TODO scalar filter - bez sensu ?>
+        $this-><?= $dependency->getName(); ?> = <?= $dependency->getValue(); ?>;
+<?php endif; ?>
+<?php endforeach; ?>
+<?php if ($sut->hasDependencies()): ?>
+        $this->sut = new <?= $sut->getShortName(); ?>(
+        <?php
+        $dependencies = $sut->getDependencies();
+        for ($i=0; $i < count($dependencies); $i++): ?>
+    $this-><?= $dependencies[$i]->getName(); ?><?php if ($dependencies[$i]->isObject()): ?>Mock<?php endif; ?><?php if($i < count($dependencies) -1):?>,<?php echo "\n"; endif; ?>
+        <?php endfor; ?>
+
+        );
+<?php else: ?>
+        $this->sut = new <?= $dependency->getShortName(); ?>();
+<?php endif; ?>
+    }
+<?php foreach ($sut->getPublicMethods() as $method):?>
+
+    public function test<?= ucfirst($method); ?>()
+    {
+        $this->markTestIncomplete('This test has not been implemented yet.');
+    }
+<?php endforeach; ?>
+}

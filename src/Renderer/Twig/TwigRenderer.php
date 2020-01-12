@@ -15,24 +15,42 @@ use UniGen\Renderer\RendererInterface;
 
 class TwigRenderer implements RendererInterface
 {
-    private const SUT = 'sut';
-    private const CONFIG = 'config';
-    private const TEST_NAMESPACE = 'testNamespace';
+    /** @var Config */
+    private $config;
 
     /** @var Environment */
     private $twig;
 
-    /** @var Config */
-    private $config;
+    /**
+     * @param Config $config
+     *
+     * @throws RendererException
+     */
+    public function __construct(Config $config)
+    {
+        $this->config = $config;
+        $this->twig = $this->createTwig();
+    }
 
     /**
-     * @param Environment $twig
-     * @param Config $config
+     * @return Environment
+     *
+     * @throws RendererException
      */
-    public function __construct(Environment $twig, Config $config)
+    private function createTwig(): Environment
     {
-        $this->twig = $twig;
-        $this->config = $config;
+        $twig = new Environment(new FilesystemLoader());
+        $twig->addExtension(new ScalarValueMapperTwigFilter());
+
+        /** @var FilesystemLoader $loader */
+        $loader = $this->twig->getLoader();
+        try {
+            $loader->addPath(dirname($this->config->get('template')));
+        } catch (LoaderError | ConfigException $exception) {
+            throw new RendererException('Unable to load template directory.', 0, $exception);
+        }
+
+        return $twig;
     }
 
     /**
@@ -41,35 +59,14 @@ class TwigRenderer implements RendererInterface
     public function render(Context $context): string
     {
         try {
-            $this->applyTemplatePath();
-        } catch (LoaderError | ConfigException $exception) {
-            throw new RendererException('Unable to load template directory.', 0, $exception);
-        }
-
-        try {
             $content = $this->twig->render(
                 basename($this->config->get('template')),
-                [
-                    self::SUT => $context->getSut(),
-                    self::CONFIG => $this->config,
-                    self::TEST_NAMESPACE => $context->getTestNamespace()
-                ]
+                ['context' => $context]
             );
         } catch (Error | ConfigException $exception) {
             throw new RendererException('SUT render failed.', 0 , $exception);
         }
 
         return $content;
-    }
-
-    /**
-     * @throws LoaderError
-     * @throws ConfigException
-     */
-    private function applyTemplatePath(): void
-    {
-        /** @var FilesystemLoader $loader */
-        $loader = $this->twig->getLoader();
-        $loader->addPath(dirname($this->config->get('template')));
     }
 }

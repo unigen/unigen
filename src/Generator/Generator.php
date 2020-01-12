@@ -55,7 +55,7 @@ class Generator
         $sut = $this->retrieveSut($sourceFile);
 
         $testNamespace = (new NamespaceResolver($this->config->get('testNamespace')))->resolve($sut->getNamespace());
-        $content = $this->renderer->render(new Context($sut, $testNamespace));
+        $content = $this->renderer->render(new Context($this->config, $sut, $testNamespace));
         $testPath = (new PathResolver($this->config->get('testPath')))->resolve($sourceFile);
 
         try {
