@@ -1,4 +1,34 @@
 {
   "main": "src/main.php",
-  "output": "bin/unigen"
+  "output": "bin/unigen.phar",
+  "compactors": [
+    "KevinGH\\Box\\Compactor\\Json",
+    "KevinGH\\Box\\Compactor\\Php",
+    "KevinGH\\Box\\Compactor\\PhpScoper"
+  ],
+  "finder": [
+    {
+      "notName": "/LICENSE|.*\\.md|.*\\.dist|Makefile|composer\\.json|composer\\.lock/",
+      "exclude": [
+        "doc",
+        "test",
+        "test_old",
+        "tests",
+        "Tests",
+        "vendor-bin"
+      ],
+      "in": "vendor"
+    },
+    {
+      "exclude": [
+        "Resources/doc",
+        "Resources/static"
+      ],
+      "in": "src"
+    },
+    {
+      "name": "composer.json",
+      "in": "."
+    }
+  ]
 }

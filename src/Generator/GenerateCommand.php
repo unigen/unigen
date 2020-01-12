@@ -23,6 +23,7 @@ class GenerateCommand extends BaseCommand
 
     const OPTION_CONFIG_FILE = 'config';
     const OPTION_OVERRIDE_FILE = 'override';
+    const OPTION_AUTOLOAD_FILE = 'autoload-file';
     const ARG_FILES = 'source_files';
 
     /** @var ConfigFactory */
@@ -63,6 +64,13 @@ class GenerateCommand extends BaseCommand
                 InputOption::VALUE_NONE,
                 'override test file if already exists'
             )
+            ->addOption(
+                self::OPTION_AUTOLOAD_FILE,
+                'a',
+                InputOption::VALUE_REQUIRED,
+                'autoloader file',
+                'vendor/autoload.php'
+            )
             ->addArgument(self::ARG_FILES, InputArgument::IS_ARRAY);
     }
 
@@ -73,7 +81,11 @@ class GenerateCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $isVerbose = (new SymfonyStyle($input, $output))->isVerbose();
+        $io = new SymfonyStyle($input, $output);
+        $isVerbose = $io->isVerbose();
+
+        // TODO move
+        require getcwd() . '/' . $this->getAutoloadFile($input);
 
         $sourceFileCollection = new SourceFileCollection($this->getSourceFiles($input));
         try {
@@ -84,8 +96,8 @@ class GenerateCommand extends BaseCommand
 
         $configPath = $this->getConfigFile($input);
         if ($configPath === null) {
-            $output->writeln($configPath === null
-                ? '<info>No config file. Default configuration applied.</info>'
+            $io->comment($configPath === null
+                ? 'No config file. Default configuration applied.'
                 : sprintf('Using config file "%s".', $configPath)
             );
         }
@@ -103,8 +115,8 @@ class GenerateCommand extends BaseCommand
             foreach ($sourceFileCollection->getExisting() as $sourceFile) {
                 $result = $generator->generate($sourceFile, $this->getOverrideFlag($input));
 
-                $output->writeln(
-                    sprintf('<info>Test file "%s" has been generated successfully</info>', $result->getTestPath())
+                $io->success(
+                    sprintf('Test file "%s" has been generated successfully', $result->getTestPath())
                 );
             }
         } catch (ConfigException $exception) {
@@ -180,6 +192,19 @@ class GenerateCommand extends BaseCommand
         $override = $input->getOption(self::OPTION_OVERRIDE_FILE);
 
         return $override;
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return string
+     */
+    private function getAutoloadFile(InputInterface $input): string
+    {
+        /** @var string $autoloadFile */
+        $autoloadFile = $input->getOption(self::OPTION_AUTOLOAD_FILE);
+
+        return $autoloadFile;
     }
 
     /**
