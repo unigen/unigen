@@ -5,6 +5,7 @@ namespace UniGen\Renderer\Plates;
 
 use League\Plates\Engine;
 use UniGen\Config\Config;
+use UniGen\Config\Exception\ConfigException;
 use UniGen\Renderer\Context;
 use UniGen\Renderer\RendererInterface;
 use UniGen\Renderer\ScalarValueMapper;
@@ -17,16 +18,21 @@ class PlatesRenderer implements RendererInterface
     /** @var Engine */
     private $engine;
 
+    /**
+     * @param Config $config
+     *
+     * @throws ConfigException
+     */
     public function __construct(Config $config)
     {
         $this->config = $config;
-        // TODO to method
-        $this->engine = new Engine(dirname($this->config->get('template')), 'phtml');
-        $this->engine->loadExtension(new ScalarValueMapperExtension(new ScalarValueMapper()));
+        $this->engine = $this->createEngine();;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @throws ConfigException
      */
     public function render(Context $context): string
     {
@@ -36,5 +42,18 @@ class PlatesRenderer implements RendererInterface
             $tplInfo['filename'],
             ['context' => $context]
         );
+    }
+
+    /**
+     * @return Engine
+     *
+     * @throws ConfigException
+     */
+    private function createEngine(): Engine
+    {
+        $engine = new Engine(dirname($this->config->get('template')), 'phtml');
+        $engine->loadExtension(new ScalarValueMapperExtension(new ScalarValueMapper()));
+
+        return $engine;
     }
 }
