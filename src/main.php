@@ -2,6 +2,7 @@
 <?php
 
 require __DIR__ . '/../vendor/autoload.php';
+require 'vendor/autoload.php';
 
 $configFactory = new UniGen\Config\ConfigFactory(
     new UniGen\Config\SchemaFactory(__DIR__ . '/Resources/schema/config')

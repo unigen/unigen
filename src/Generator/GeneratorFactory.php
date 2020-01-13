@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace UniGen\Generator;
 
 use UniGen\Config\Config;
+use UniGen\Config\Exception\ConfigException;
 use UniGen\Renderer\RendererFactory;
 use UniGen\Sut\SutFactory;
 
@@ -29,6 +30,8 @@ class GeneratorFactory
      * @param Config $config
      *
      * @return Generator
+     *
+     * @throws ConfigException
      */
     public function create(Config $config): Generator
     {
