@@ -44,7 +44,7 @@ class ConfigFactory
             'version' => Schema::LATEST_VERSION,
             'testPath' => 'tests/unit/<dirname(1)>/<filename>Test.<extension>',
             'testNamespace' => 'Test\Unit\<namespace>',
-            'testCaseClass' => '\PHPUnit\Framework\TestCase',
+            'testCaseClass' => implode('\\', ['\PHPUnit', 'Framework', 'TestCase']), // php-scoper hack
             'mockFramework' => 'mockery',
             'template' => __DIR__ . '/../Resources/views/sut_template.php'
         ];

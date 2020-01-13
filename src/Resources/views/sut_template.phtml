@@ -6,6 +6,8 @@ $sut = $context->getSut();
 $config = $context->getConfig();
 ?>
 <?= "<?php\n" ?>
+declare(strict_types=1);
+<?= "\n"; ?>
 <?php if($sut->hasNamespace()): ?>
 namespace <?= $context->getTestNamespace(); ?>;
 <?= "\n"?>
@@ -41,7 +43,7 @@ final class <?= $sut->getShortName(); ?>Test extends <?= $config->get('testCaseC
     /**
      * {@inheritdoc}
     */
-    public function setUp()
+    public function setUp(): void
     {
 <?php foreach($sut->getDependencies() as $dependency): ?>
 <?php if ($dependency->isObject()): ?>
@@ -59,7 +61,7 @@ final class <?= $sut->getShortName(); ?>Test extends <?= $config->get('testCaseC
         <?php
         $dependencies = $sut->getDependencies();
         for ($i=0; $i < count($dependencies); $i++): ?>
-    $this-><?= $dependencies[$i]->getName(); ?><?php if ($dependencies[$i]->isObject()): ?>Mock<?php endif; ?><?php if($i < count($dependencies) -1):?>,<?php echo "\n"; endif; ?>
+    $this-><?= $dependencies[$i]->getName(); ?><?php if ($dependencies[$i]->isObject()): ?>Mock<?php endif; ?><?php if($i < count($dependencies) -1):?>,<?= "\n";?> <?php endif; ?>
         <?php endfor; ?>
 
         );
@@ -69,7 +71,7 @@ final class <?= $sut->getShortName(); ?>Test extends <?= $config->get('testCaseC
     }
 <?php foreach ($sut->getPublicMethods() as $method):?>
 
-    public function test<?= ucfirst($method); ?>()
+    public function test<?= ucfirst($method); ?>(): void
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
     }
