@@ -93,18 +93,11 @@ class GenerateCommand extends BaseCommand
             $config = $configPath
                 ? $this->configFactory->createFromFile($configPath)
                 : $this->configFactory->createDefault();
-        } catch (ConfigException $exception) {
-            throw $this->handleConfigException($exception, $isVerbose);
-        }
 
-        try {
             $generator = $this->generatorFactory->create($config);
             foreach ($sourceFileCollection->getExisting() as $sourceFile) {
                 $result = $generator->generate($sourceFile, $this->getOverrideFlag($input));
-
-                $io->success(
-                    sprintf('Test file "%s" has been generated successfully', $result->getTestPath())
-                );
+                $io->success(sprintf('Test file "%s" has been generated successfully', $result->getTestPath()));
             }
         } catch (ConfigException $exception) {
             throw $this->handleConfigException($exception, $isVerbose);
