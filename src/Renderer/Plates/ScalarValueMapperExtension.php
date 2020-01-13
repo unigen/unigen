@@ -23,7 +23,7 @@ class ScalarValueMapperExtension implements ExtensionInterface
     /**
      * @param Engine $engine
      */
-    public function register(Engine $engine)
+    public function register(Engine $engine): void
     {
         $engine->registerFunction('scalar', [$this, 'scalar']);
     }

@@ -5,3 +5,4 @@ parameters:
   checkGenericClassInNonGenericObjectType: false
   ignoreErrors:
     - '/Parameter #1 $argument of class ReflectionClass constructor expects class-string<T of object>|T of object, string given\./'
+    - '/Parameter #2 $callback of method League\\Plates\Engine::registerFunction() expects League\\Plates\callback, array<int, $this(UniGen\Renderer\\Plates\ScalarValueMapperExtension)|string> given./'

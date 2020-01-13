@@ -5,11 +5,11 @@ namespace UniGen\Config\Exception;
 
 class InvalidConfigSchemaException extends ConfigException
 {
-    /** @var string[] */
+    /** @var array[] */
     private $violations = [];
 
     /**
-     * @return string[]
+     * @return array[]
      */
     public function getViolations(): array
     {
@@ -17,7 +17,7 @@ class InvalidConfigSchemaException extends ConfigException
     }
 
     /**
-     * @param string[] $violations
+     * @param array[] $violations
      */
     public function setViolations(array $violations): void
     {

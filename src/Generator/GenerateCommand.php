@@ -84,12 +84,10 @@ class GenerateCommand extends BaseCommand
         }
 
         $configPath = $this->getConfigFile($input);
-        if ($configPath === null) {
-            $io->comment($configPath === null
-                ? 'No config file. Default configuration applied.'
-                : sprintf('Using config file "%s".', $configPath)
-            );
-        }
+        $io->comment($configPath === null
+            ? 'No config file. Default configuration applied.'
+            : sprintf('Using config file "%s".', $configPath)
+        );
 
         try {
             $config = $configPath
