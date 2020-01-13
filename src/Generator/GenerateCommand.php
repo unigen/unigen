@@ -19,11 +19,11 @@ use UniGen\Sut\SutException;
 
 class GenerateCommand extends BaseCommand
 {
-    const NAME = 'unigen:generate';
+    private const NAME = 'unigen:generate';
 
-    const OPTION_CONFIG_FILE = 'config';
-    const OPTION_OVERRIDE_FILE = 'override';
-    const ARG_FILES = 'source_files';
+    private const OPTION_CONFIG_FILE = 'config';
+    private const OPTION_OVERRIDE_FILE = 'override';
+    private const ARG_FILES = 'source_files';
 
     /** @var ConfigFactory */
     private $configFactory;
