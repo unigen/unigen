@@ -27,8 +27,8 @@ Symfony bundle [unigen/unigen-bundle](https://github.com/unigen/unigen-bundle)
 
 ### Documentation
 
-* [How to use](src/Resources/doc/1-how-to-use.md)
-* [IDE integration](src/Resources/doc/2-integration.md)
+* [How to use](doc/1-how-to-use.md)
+* [IDE integration](doc/2-integration.md)
 
 ### License
 This bundle is available under the MIT license.
