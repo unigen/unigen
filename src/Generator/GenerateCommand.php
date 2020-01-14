@@ -19,7 +19,7 @@ use UniGen\Sut\SutException;
 
 class GenerateCommand extends BaseCommand
 {
-    private const NAME = 'unigen:generate';
+    public const NAME = 'unigen:generate';
 
     private const OPTION_CONFIG_FILE = 'config';
     private const OPTION_OVERRIDE_FILE = 'override';
