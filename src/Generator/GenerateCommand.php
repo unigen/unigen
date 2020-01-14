@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 use UniGen\Config\ConfigFactory;
 use UniGen\Config\Exception\ConfigException;
 use UniGen\Config\Exception\InvalidConfigSchemaException;
@@ -173,12 +174,12 @@ class GenerateCommand extends BaseCommand
     }
 
     /**
-     * @param GeneratorException $exception
+     * @param Throwable $exception
      * @param bool $isVerbose
      *
      * @return GenerateCommandException
      */
-    private function handleException(GeneratorException $exception, bool $isVerbose): GenerateCommandException
+    private function handleException(Throwable $exception, bool $isVerbose): GenerateCommandException
     {
         $message = $exception->getMessage();
         if ($exception instanceof MissingSourceFileException) {
@@ -191,7 +192,11 @@ class GenerateCommand extends BaseCommand
         if ($exception instanceof InvalidConfigSchemaException) {
             $violationList = [];
             foreach ($exception->getViolations() as $violation) {
-                $violationList[] = sprintf('[%s] %s', $violation['property'], $violation['message']);
+                $property = $violation['property'];
+                if (strlen($property) > 0) {
+                    $property = '[' . $property . ']';
+                }
+                $violationList[] = trim(sprintf('%s %s', $property, $violation['message']));
             }
 
             $message = $this->createConsoleList(
