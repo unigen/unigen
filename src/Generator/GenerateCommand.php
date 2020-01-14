@@ -80,7 +80,7 @@ class GenerateCommand extends BaseCommand
         try {
             $this->validateSourceFileCollection($sourceFileCollection);
         } catch (GeneratorException $exception) {
-            throw $this->handleGeneratorException($exception, $isVerbose);
+            throw $this->handleException($exception, $isVerbose);
         }
 
         $configPath = $this->getConfigFile($input);
@@ -99,14 +99,12 @@ class GenerateCommand extends BaseCommand
                 $result = $generator->generate($sourceFile, $this->getOverrideFlag($input));
                 $io->success(sprintf('Test file "%s" has been generated successfully', $result->getTestPath()));
             }
-        } catch (ConfigException $exception) {
-            throw $this->handleConfigException($exception, $isVerbose);
-        } catch (GeneratorException $exception) {
-            throw $this->handleGeneratorException($exception, $isVerbose);
-        } catch (RendererException $exception) {
-            throw $this->handleRendererException($exception, $isVerbose);
-        } catch (SutException $exception) {
-            throw $this->handleSutException($exception, $isVerbose);
+        } catch (
+            ConfigException |
+            GeneratorException |
+            RendererException |
+            SutException $exception) {
+            throw $this->handleException($exception, $isVerbose);
         }
 
         return 0;
@@ -180,7 +178,7 @@ class GenerateCommand extends BaseCommand
      *
      * @return GenerateCommandException
      */
-    private function handleGeneratorException(GeneratorException $exception, bool $isVerbose): GenerateCommandException
+    private function handleException(GeneratorException $exception, bool $isVerbose): GenerateCommandException
     {
         $message = $exception->getMessage();
         if ($exception instanceof MissingSourceFileException) {
@@ -190,18 +188,6 @@ class GenerateCommand extends BaseCommand
             );
         }
 
-        return new GenerateCommandException($message, 1, $isVerbose ? $exception : null);
-    }
-
-    /**
-     * @param ConfigException $exception
-     * @param bool $isVerbose
-     *
-     * @return GenerateCommandException
-     */
-    private function handleConfigException(ConfigException $exception, bool $isVerbose): GenerateCommandException
-    {
-        $message = $exception->getMessage();
         if ($exception instanceof InvalidConfigSchemaException) {
             $violationList = [];
             foreach ($exception->getViolations() as $violation) {
@@ -214,29 +200,7 @@ class GenerateCommand extends BaseCommand
             );
         }
 
-        return new GenerateCommandException($message, 2, $isVerbose ? $exception : null);
-    }
-
-    /**
-     * @param RendererException $exception
-     * @param bool $isVerbose
-     *
-     * @return GenerateCommandException
-     */
-    private function handleRendererException(RendererException $exception, bool $isVerbose): GenerateCommandException
-    {
-        return new GenerateCommandException($exception->getMessage(), 3, $isVerbose ? $exception : null);
-    }
-
-    /**
-     * @param SutException $exception
-     * @param bool $isVerbose
-     *
-     * @return GenerateCommandException
-     */
-    private function handleSutException(SutException $exception, bool $isVerbose): GenerateCommandException
-    {
-        return new GenerateCommandException($exception->getMessage(), 4, $isVerbose ? $exception : null);
+        return new GenerateCommandException($message, 1, $isVerbose ? $exception : null);
     }
 
     /**
@@ -247,7 +211,7 @@ class GenerateCommand extends BaseCommand
      */
     private function createConsoleList(string $header, array $elements): string
     {
-        $lines = [$header];
+        $lines = [$header, ''];
         foreach ($elements as $element) {
             $lines[] = '> ' . $element;
         }
