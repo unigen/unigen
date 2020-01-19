@@ -17,7 +17,7 @@ use UniGen\Sut\SutInterface;
 use UniGen\Util\Exception\FileWriterException;
 use UniGen\Util\FileWriter;
 
-class Generator
+class TestGenerator
 {
     /** @var Config */
     private $config;
@@ -43,14 +43,14 @@ class Generator
      * @param string $sourceFile
      * @param bool $override
      *
-     * @return Result
+     * @return TestGenerationResult
      *
      * @throws ConfigException
      * @throws GeneratorException
      * @throws RendererException
      * @throws SutException
      */
-    public function generate(string $sourceFile, bool $override): Result
+    public function generate(string $sourceFile, bool $override): TestGenerationResult
     {
         $sut = $this->retrieveSut($sourceFile);
 
@@ -67,7 +67,7 @@ class Generator
                 $exception
             );
         }
-        return new Result($testPath);
+        return new TestGenerationResult($testPath);
     }
 
     /**

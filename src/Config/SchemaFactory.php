@@ -29,10 +29,8 @@ class SchemaFactory
      */
     public function create(int $version): Schema
     {
-        $schemaPath = $this->schemaDir . DIRECTORY_SEPARATOR . $version . '.json';
-
         try {
-            $content = JsonFileReader::getContent($schemaPath);
+            $content = JsonFileReader::getContent($this->getSchemaPath($version));
         } catch (FileReaderException $exception) {
             throw new ConfigException(
                 sprintf('Unable to load schema version #%d.', $version),
@@ -42,6 +40,16 @@ class SchemaFactory
         }
 
         return new Schema($content);
+    }
+
+    /**
+     * @param int $version
+     *
+     * @return string
+     */
+    private function getSchemaPath(int $version): string
+    {
+        return $this->schemaDir . DIRECTORY_SEPARATOR . $version . '.json';
     }
 
     /**

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace UniGen\Generator;
 
-class Result
+class TestGenerationResult
 {
     /** @var string */
     private $testPath;

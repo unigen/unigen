@@ -21,15 +21,14 @@ class FileWriter
         }
 
         $dir = dirname($path);
-        if (!is_dir($dir)) {
-            $dirCreated = mkdir($dir, 0777, true);
-            if (!$dirCreated) {
+        if (is_dir($dir) === false) {
+            if (mkdir($dir, 0777, true) === false) {
                 throw new FileWriterException(sprintf('Can\'t create directory "%d".', $dir));
             }
         }
 
         $fileCreated = file_put_contents($path, $content);
-        if (!$fileCreated) {
+        if ($fileCreated === false) {
             throw new FileWriterException(sprintf('Unable to save file "%s".', $path));
         }
     }

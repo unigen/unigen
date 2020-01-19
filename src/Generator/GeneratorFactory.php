@@ -29,13 +29,13 @@ class GeneratorFactory
     /**
      * @param Config $config
      *
-     * @return Generator
+     * @return TestGenerator
      *
      * @throws ConfigException
      */
-    public function create(Config $config): Generator
+    public function create(Config $config): TestGenerator
     {
-        return new Generator(
+        return new TestGenerator(
             $config,
             $this->sutFactory,
             $this->rendererFactory->create($config)

@@ -26,11 +26,11 @@ class PlatesRenderer implements RendererInterface
     public function __construct(Config $config)
     {
         $this->config = $config;
-        $this->engine = $this->createEngine();;
+        $this->engine = $this->createEngine();
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @throws ConfigException
      */
