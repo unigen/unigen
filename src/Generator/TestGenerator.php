@@ -28,15 +28,37 @@ class TestGenerator
     /** @var RendererInterface */
     private $renderer;
 
+    /** @var NamespaceResolver */
+    private $namespaceResolver;
+
+    /** @var PathResolver */
+    private $pathResolver;
+
+    /** @var ClassNameResolver */
+    private $classNameResolver;
+
     /**
      * @param Config $config
      * @param SutFactory $sutFactory
      * @param RendererInterface $renderer
+     * @param NamespaceResolver $namespaceResolver
+     * @param PathResolver $pathResolver
+     * @param ClassNameResolver $classNameResolver
      */
-    public function __construct(Config $config, SutFactory $sutFactory, RendererInterface $renderer) {
+    public function __construct(
+        Config $config,
+        SutFactory $sutFactory,
+        RendererInterface $renderer,
+        NamespaceResolver $namespaceResolver,
+        PathResolver $pathResolver,
+        ClassNameResolver $classNameResolver
+    ) {
+        $this->config = $config;
         $this->sutFactory = $sutFactory;
         $this->renderer = $renderer;
-        $this->config = $config;
+        $this->namespaceResolver = $namespaceResolver;
+        $this->pathResolver = $pathResolver;
+        $this->classNameResolver = $classNameResolver;
     }
 
     /**
@@ -54,9 +76,15 @@ class TestGenerator
     {
         $sut = $this->retrieveSut($sourceFile);
 
-        $testNamespace = (new NamespaceResolver($this->config->get('testNamespace')))->resolve($sut->getNamespace());
+        $testNamespace = $this->namespaceResolver->resolve(
+            $this->config->get('testNamespace'),
+            $sut->getNamespace()
+        );
         $content = $this->renderer->render(new Context($this->config, $sut, $testNamespace));
-        $testPath = (new PathResolver($this->config->get('testPath')))->resolve($sourceFile);
+        $testPath = $this->pathResolver->resolve(
+            $this->config->get('testPath'),
+            $sourceFile
+        );
 
         try {
             (new FileWriter())->write($testPath, $content, $override);
@@ -80,7 +108,7 @@ class TestGenerator
      */
     private function retrieveSut(string $path): SutInterface
     {
-        $className = (new ClassNameResolver())->resolveFromFile($path);
+        $className = $this->classNameResolver->resolveFromFile($path);
 
         $sut = $this->sutFactory->create($className);
         (new SutValidator())->validate($sut);

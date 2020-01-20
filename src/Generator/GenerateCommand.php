@@ -26,6 +26,8 @@ class GenerateCommand extends BaseCommand
     private const OPTION_OVERRIDE_FILE = 'override';
     private const ARG_FILES = 'source_files';
 
+    private const CODE_SUCCESS = 0;
+
     /** @var ConfigFactory */
     private $configFactory;
 
@@ -108,7 +110,7 @@ class GenerateCommand extends BaseCommand
             throw $this->handleException($exception, $isVerbose);
         }
 
-        return 0;
+        return self::CODE_SUCCESS;
     }
 
     /**

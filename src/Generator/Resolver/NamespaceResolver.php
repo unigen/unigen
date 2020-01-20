@@ -9,30 +9,20 @@ class NamespaceResolver extends PatternBasedResolver
 {
     private const NAMESPACE_SEPARATOR = '\\';
 
-    /** @var string[] */
-    private $patternParts;
-
     /**
      * @param string $pattern
-     */
-    public function __construct(string $pattern)
-    {
-        $this->patternParts = explode(self::NAMESPACE_SEPARATOR, $pattern);
-    }
-
-    /**
      * @param string $namespace
      *
      * @return string
      *
      * @throws GeneratorException
      */
-    public function resolve(string $namespace): string
+    public function resolve(string $pattern, string $namespace): string
     {
         $namespaces = explode(self::NAMESPACE_SEPARATOR, $namespace);
 
         $resolvedPatternParts = [];
-        foreach ($this->patternParts as $patternPart) {
+        foreach (explode(self::NAMESPACE_SEPARATOR, $pattern) as $patternPart) {
             $resolvedPatternParts[] = $this->resolvePatternPart($patternPart, $namespaces);
         }
 

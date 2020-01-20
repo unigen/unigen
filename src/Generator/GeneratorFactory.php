@@ -5,6 +5,9 @@ namespace UniGen\Generator;
 
 use UniGen\Config\Config;
 use UniGen\Config\Exception\ConfigException;
+use UniGen\Generator\Resolver\ClassNameResolver;
+use UniGen\Generator\Resolver\NamespaceResolver;
+use UniGen\Generator\Resolver\PathResolver;
 use UniGen\Renderer\RendererFactory;
 use UniGen\Sut\SutFactory;
 
@@ -38,7 +41,10 @@ class GeneratorFactory
         return new TestGenerator(
             $config,
             $this->sutFactory,
-            $this->rendererFactory->create($config)
+            $this->rendererFactory->create($config),
+            new NamespaceResolver(),
+            new PathResolver(),
+            new ClassNameResolver()
         );
     }
 }

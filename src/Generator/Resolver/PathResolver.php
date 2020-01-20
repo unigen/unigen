@@ -7,25 +7,15 @@ use UniGen\Generator\Exception\GeneratorException;
 
 class PathResolver extends PatternBasedResolver
 {
-    /** @var string[] */
-    private $patternParts;
-
     /**
      * @param string $pattern
-     */
-    public function __construct(string $pattern)
-    {
-        $this->patternParts = explode('/', $pattern);
-    }
-
-    /**
      * @param string $path
      *
      * @return string
      *
      * @throws GeneratorException
      */
-    public function resolve(string $path): string
+    public function resolve(string $pattern, string $path): string
     {
         $cwd = getcwd();
         if ($cwd === false) {
@@ -45,7 +35,7 @@ class PathResolver extends PatternBasedResolver
         ];
 
         $resolvedPatternsParts = [];
-        foreach ($this->patternParts as $patternPart) {
+        foreach (explode('/', $pattern) as $patternPart) {
             $resolvedPatternsParts[] = $this->resolvePatternPart($patternPart, $replacements);
         }
 
