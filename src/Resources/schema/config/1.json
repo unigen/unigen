@@ -1,0 +1,34 @@
+{
+  "$id": "https://unigen.pl/config.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UniGen Config",
+  "type": "object",
+  "properties": {
+    "version": {
+      "description": "Config version",
+      "type": "number"
+    },
+    "testPath": {
+      "description": "Where to save generated test file based on source file path",
+      "type": "string"
+    },
+    "testNamespace": {
+      "description": "How to build namespace based on source file namespace",
+      "type": "string"
+    },
+    "testCaseClass": {
+      "description": "Parent class that will be extend in generated test",
+      "type": "string"
+    },
+    "mockFramework": {
+      "description": "Test framework",
+      "type": "string",
+      "enum": ["mockery", "phpunit"]
+    },
+    "template": {
+      "description": "Template used to generate test",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

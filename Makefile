@@ -1,18 +1,24 @@
-help:
+.PHONY: help
+help: ## List of available make commands
 	@echo "Available commands:"
 	@echo ""
-	@echo "help                        List of available make commands"
-	@echo "install                     Install PHP dependencies"
-	@echo "unit                        Launch PHPUnit unit tests"
-	@echo "unit-coverage               Launch PHPUnit unit coverage raport generation"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-14s\033[0m %s\n", $$1, $$2}'
 
-install:
-	composer install
+.PHONY: install
+install: ## Install PHP dependencies
+	@composer install
 
-unit:
-	@echo "PHPUNIT -- UNIT TESTS"
-	vendor/bin/phpunit
+.PHONY: unit
+unit: ## Launch PHPUnit unit tests
+	@echo "UNIT TESTS"
+	@vendor/bin/phpunit
 
-unit-coverage:
-	@echo "PHPUNIT -- UNIT COVERAGE"
-	vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
+.PHONY: build
+build: ## Build bin/unigen
+	@box compile
+
+.PHONY: lint
+lint: ## Lint source files
+	@vendor/bin/phpstan analyze
+
+.DEFAULT_GOAL := help

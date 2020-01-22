@@ -2,15 +2,15 @@
 
 namespace UniGen\Test\Sut\Provider;
 
+use Mockery;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use Mockery\MockInterface;
+use PHPUnit\Framework\TestCase;
 use UniGen\Sut\Adapter\ReflectionSutAdapter;
-use UniGen\Sut\Exception\SutValidatorException;
+use UniGen\Sut\Exception\GeneratorException;
+use UniGen\Sut\Provider\ReflectionSutProvider;
 use UniGen\Sut\SutInterface;
 use UniGen\Sut\SutValidator;
-use Mockery;
-use Mockery\MockInterface;
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use PHPUnit\Framework\TestCase;
-use UniGen\Sut\Provider\ReflectionSutProvider;
 
 class ReflectionSutProviderTest extends TestCase
 {
@@ -55,9 +55,9 @@ class ReflectionSutProviderTest extends TestCase
         $this->validator
             ->shouldReceive('validate')
             ->with(anInstanceOf(ReflectionSutAdapter::class))
-            ->andThrow(new SutValidatorException());
+            ->andThrow(new GeneratorException());
 
-        $this->expectException(SutValidatorException::class);
+        $this->expectException(GeneratorException::class);
 
         $this->sut->provide(self::SUT_CLASS);
     }

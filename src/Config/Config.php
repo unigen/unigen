@@ -1,56 +1,49 @@
 <?php
-
 declare(strict_types=1);
 
 namespace UniGen\Config;
 
+use UniGen\Config\Exception\ConfigException;
+
 class Config
 {
-    /** @var array */
+    /** @var array<string, mixed> */
     private $parameters;
 
     /**
-     * @param array $parameters
+     * @param array<string, mixed> $parameters
+     * @param Schema $schema
+     *
+     * @throws ConfigException
      */
-    public function __construct(array $parameters = [])
+    public function __construct(array $parameters, Schema $schema)
     {
+        $schema->validate($parameters);
         $this->parameters = $parameters;
     }
 
     /**
-     * @param array $parameters
+     * @param string $key
+     *
+     * @return mixed
+     *
+     * @throws ConfigException
      */
-    public function merge(array $parameters)
+    public function get(string $key)
     {
-        $this->parameters = array_merge($this->parameters, array_filter($parameters));
-    }
+        if (!$this->has($key)) {
+            throw new ConfigException(sprintf('Config key "%s" does not exist.', $key));
+        }
 
-    /**
-     * @param $key
-     * @param $value
-     */
-    public function set($key, $value)
-    {
-        $this->parameters[$key] = $value;
+        return $this->parameters[$key];
     }
 
     /**
      * @param string $key
-     * @param null   $default
-     *
-     * @return mixed
-     */
-    public function get(string $key, $default = null)
-    {
-        return $this->has($key) ? $this->parameters[$key] : $default;
-    }
-
-    /**
-     * @param $key
      *
      * @return bool
      */
-    public function has($key): bool
+    public function has(string $key): bool
     {
         return isset($this->parameters[$key]);
     }

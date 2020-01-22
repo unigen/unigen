@@ -1,23 +1,75 @@
 <?php
+declare(strict_types=1);
 
 namespace UniGen\Config;
 
+use UniGen\Config\Exception\ConfigException;
+use UniGen\Util\Exception\FileReaderException;
+use UniGen\Util\FileReader\JsonFileReader;
+
 class ConfigFactory
 {
+    /** @var SchemaFactory */
+    private $schemaFactory;
+
+    /**
+     * @param SchemaFactory $schemaFactory
+     */
+    public function __construct(SchemaFactory $schemaFactory)
+    {
+        $this->schemaFactory = $schemaFactory;
+    }
+
     /**
      * @return Config
+     *
+     * @throws ConfigException
      */
-    public static function createDefault(): Config
+    public function createDefault(): Config
     {
-        return new Config([
-            'testCase' => 'TestCase',
-            'mockFramework' => 'mockery',
-            'pathPattern' => '/src\/([a-zA-Z\/]+)/',
-            'template' => 'sut_template.php.twig',
-            'pathPatternReplacement' => 'tests/${1}Test',
-            'templateDir' => __DIR__ . '/../Resources/views',
-            'namespacePattern' => '/namespace ([a-zA-Z]+\\\\)(.*);/',
-            'namespacePatternReplacement' => 'namespace ${1}Test\\\\${2};'
-        ]);
+        return new Config(
+            $this->getDefaultParameters(),
+            $this->schemaFactory->createLatestSchema()
+        );
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getDefaultParameters(): array
+    {
+        return [
+            'version' => Schema::LATEST_VERSION,
+            'testPath' => 'tests/unit/<dirname(1)>/<filename>Test.<extension>',
+            'testNamespace' => 'Test\Unit\<namespace>',
+            'testCaseClass' => implode('\\', ['\PHPUnit', 'Framework', 'TestCase']), // php-scoper hack
+            'mockFramework' => 'mockery',
+            'template' => __DIR__ . '/../Resources/views/sut_template.php'
+        ];
+    }
+
+    /**
+     * @param string $configPath
+     *
+     * @return Config
+     *
+     * @throws ConfigException
+     */
+    public function createFromFile(string $configPath): Config
+    {
+        try {
+            $content = JsonFileReader::getContent($configPath);
+        } catch (FileReaderException $exception) {
+            throw new ConfigException(
+                sprintf('Unable to load config file "%s".', $configPath),
+                0,
+                $exception
+            );
+        }
+
+        $parameters = array_merge($this->getDefaultParameters(), $content);
+
+        return new Config($parameters, $this->schemaFactory->create($parameters['version']));
+    }
+
 }

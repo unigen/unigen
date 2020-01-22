@@ -1,7 +1,6 @@
 .git
 vendor/
 .idea
-composer.lock
 phpunit.xml
 coverage.clover
 coverage.xml

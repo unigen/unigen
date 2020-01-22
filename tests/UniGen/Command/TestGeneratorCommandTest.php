@@ -3,18 +3,18 @@
 namespace UniGen\Test\Command;
 
 use Mockery;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Tester\CommandTester;
+use UniGen\Command\TestGeneratorCommand;
 use UniGen\Config\Config;
 use UniGen\FileSystem\FileSystemInterface;
 use UniGen\Renderer\RendererInterface;
-use UniGen\Command\TestGeneratorCommand;
-use Symfony\Component\Console\Application;
 use UniGen\Sut\SutInterface;
 use UniGen\Sut\SutProviderInterface;
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 class TestGeneratorCommandTest extends TestCase
 {

@@ -2,14 +2,16 @@
 
 namespace UniGen\Renderer;
 
-use UniGen\Sut\SutInterface;
+use UniGen\Renderer\Exception\RendererException;
 
 interface RendererInterface
 {
     /**
-     * @param SutInterface $sut
+     * @param Context $context
      *
      * @return string
+     *
+     * @throws RendererException
      */
-    public function render(SutInterface $sut): string;
+    public function render(Context $context): string;
 }
