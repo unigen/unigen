@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace UniGen\Util\Exception;
 
-use Exception;
+use UniGen\Share\Exception\UnigenException;
 
-class FileWriterException extends Exception
+class FileWriterException extends UnigenException
 {
 }

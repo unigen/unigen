@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace UniGen\Config;
 
 use JsonSchema\Validator;
-use UniGen\Config\Exception\InvalidConfigSchemaException;
+use UniGen\Config\Exception\ConfigException;
 
 class Schema
 {
@@ -24,7 +24,7 @@ class Schema
     /**
      * @param array<string, mixed> $config
      *
-     * @throws InvalidConfigSchemaException
+     * @throws ConfigException
      */
     public function validate(array $config): void
     {
@@ -36,10 +36,28 @@ class Schema
         );
 
         if (!$validator->isValid()) {
-            $exception = new InvalidConfigSchemaException('Invalid config schema.');
-            $exception->setViolations($validator->getErrors());
-
-            throw $exception;
+            throw new ConfigException(
+                sprintf(
+                    'Invalid config schema. %s.',
+                    $this->stringifyViolation(current($validator->getErrors()))
+                )
+            );
         }
+    }
+
+    /**
+     * @param array<string, string> $violation
+     *
+     * @return string
+     */
+    private function stringifyViolation(array $violation): string
+    {
+        $property = $violation['property'];
+        if (strlen($property) > 0) {
+            $property = '[' . $property . ']';
+        }
+        $violationMsg = trim(sprintf('%s %s', $property, $violation['message']));
+
+        return rtrim($violationMsg, '.');
     }
 }

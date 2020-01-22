@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace UniGen\Config;
 
 use UniGen\Config\Exception\ConfigException;
-use UniGen\Config\Exception\InvalidConfigSchemaException;
 
 class Config
 {
@@ -15,7 +14,7 @@ class Config
      * @param array<string, mixed> $parameters
      * @param Schema $schema
      *
-     * @throws InvalidConfigSchemaException
+     * @throws ConfigException
      */
     public function __construct(array $parameters, Schema $schema)
     {
@@ -46,6 +45,6 @@ class Config
      */
     public function has(string $key): bool
     {
-        return array_key_exists($key, $this->parameters);
+        return isset($key, $this->parameters);
     }
 }

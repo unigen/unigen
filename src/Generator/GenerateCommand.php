@@ -2,23 +2,17 @@
 
 namespace UniGen\Generator;
 
-use Symfony\Component\Console\Command\Command as BaseCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Throwable;
 use UniGen\Config\ConfigFactory;
-use UniGen\Config\Exception\ConfigException;
-use UniGen\Config\Exception\InvalidConfigSchemaException;
-use UniGen\Generator\Exception\GenerateCommandException;
 use UniGen\Generator\Exception\GeneratorException;
-use UniGen\Generator\Exception\MissingSourceFileException;
-use UniGen\Renderer\RendererException;
-use UniGen\Sut\SutException;
+use UniGen\Share\Exception\UnigenException;
 
-class GenerateCommand extends BaseCommand
+class GenerateCommand extends Command
 {
     public const NAME = 'unigen:generate';
 
@@ -72,19 +66,14 @@ class GenerateCommand extends BaseCommand
     /**
      * {@inheritdoc}
      *
-     * @throws GenerateCommandException
+     * @throws UnigenException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $isVerbose = $io->isVerbose();
 
         $sourceFileCollection = new SourceFileCollection($this->getSourceFiles($input));
-        try {
-            $this->validateSourceFileCollection($sourceFileCollection);
-        } catch (GeneratorException $exception) {
-            throw $this->handleException($exception, $isVerbose);
-        }
+        $this->validateSourceFileCollection($sourceFileCollection);
 
         $configPath = $this->getConfigFile($input);
         $io->comment($configPath === null
@@ -92,22 +81,14 @@ class GenerateCommand extends BaseCommand
             : sprintf('Using config file "%s".', $configPath)
         );
 
-        try {
-            $config = $configPath
-                ? $this->configFactory->createFromFile($configPath)
-                : $this->configFactory->createDefault();
+        $config = $configPath
+            ? $this->configFactory->createFromFile($configPath)
+            : $this->configFactory->createDefault();
 
-            $generator = $this->generatorFactory->create($config);
-            foreach ($sourceFileCollection->getExisting() as $sourceFile) {
-                $result = $generator->generate($sourceFile, $this->getOverrideFlag($input));
-                $io->success(sprintf('Test file "%s" has been generated successfully', $result->getTestPath()));
-            }
-        } catch (
-            ConfigException |
-            GeneratorException |
-            RendererException |
-            SutException $exception) {
-            throw $this->handleException($exception, $isVerbose);
+        $generator = $this->generatorFactory->create($config);
+        foreach ($sourceFileCollection->getExisting() as $sourceFile) {
+            $result = $generator->generate($sourceFile, $this->getOverrideFlag($input));
+            $io->success(sprintf('Test file "%s" has been generated successfully', $result->getTestPath()));
         }
 
         return self::CODE_SUCCESS;
@@ -117,7 +98,6 @@ class GenerateCommand extends BaseCommand
      * @param SourceFileCollection $sourceFileCollection
      *
      * @throws GeneratorException
-     * @throws MissingSourceFileException
      */
     private function validateSourceFileCollection(SourceFileCollection $sourceFileCollection): void
     {
@@ -126,10 +106,9 @@ class GenerateCommand extends BaseCommand
         }
 
         if ($sourceFileCollection->hasMissing()) {
-            $exception = new MissingSourceFileException('Source files does not exist.');
-            $exception->setMissingFiles($sourceFileCollection->getMissing());
-
-            throw $exception;
+            throw new GeneratorException(
+                sprintf('Source file "%s" does not exist.', $sourceFileCollection->getFirstMissing())
+            );
         }
     }
 
@@ -173,56 +152,5 @@ class GenerateCommand extends BaseCommand
         $override = $input->getOption(self::OPTION_OVERRIDE_FILE);
 
         return $override;
-    }
-
-    /**
-     * @param Throwable $exception
-     * @param bool $isVerbose
-     *
-     * @return GenerateCommandException
-     */
-    private function handleException(Throwable $exception, bool $isVerbose): GenerateCommandException
-    {
-        $message = $exception->getMessage();
-        if ($exception instanceof MissingSourceFileException) {
-            $message = $this->createConsoleList(
-                'The following source file(s) does not exists:',
-                $exception->getMissingFiles()
-            );
-        }
-
-        if ($exception instanceof InvalidConfigSchemaException) {
-            $violationList = [];
-            foreach ($exception->getViolations() as $violation) {
-                $property = $violation['property'];
-                if (strlen($property) > 0) {
-                    $property = '[' . $property . ']';
-                }
-                $violationList[] = trim(sprintf('%s %s', $property, $violation['message']));
-            }
-
-            $message = $this->createConsoleList(
-                'Invalid config schema. Please fix the following violations:',
-                $violationList
-            );
-        }
-
-        return new GenerateCommandException($message, 1, $isVerbose ? $exception : null);
-    }
-
-    /**
-     * @param string $header
-     * @param string[] $elements
-     *
-     * @return string
-     */
-    private function createConsoleList(string $header, array $elements): string
-    {
-        $lines = [$header, ''];
-        foreach ($elements as $element) {
-            $lines[] = '> ' . $element;
-        }
-
-        return implode("\n", $lines);
     }
 }

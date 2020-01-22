@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace UniGen\Config\Exception;
+namespace UniGen\Sut\Exception;
 
 use UniGen\Share\Exception\UnigenException;
 
-class ConfigException extends UnigenException
+class SutException extends UnigenException
 {
 }

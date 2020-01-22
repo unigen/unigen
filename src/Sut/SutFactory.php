@@ -5,6 +5,7 @@ namespace UniGen\Sut;
 
 use ReflectionClass;
 use ReflectionException;
+use UniGen\Sut\Exception\SutException;
 use UniGen\Sut\Reflection\ReflectionSutAdapter;
 
 class SutFactory

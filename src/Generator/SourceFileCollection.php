@@ -73,4 +73,12 @@ class SourceFileCollection
     {
         return $this->missingSourceFiles;
     }
+
+    /**
+     * @return string
+     */
+    public function getFirstMissing(): string
+    {
+        return current($this->getMissing());
+    }
 }

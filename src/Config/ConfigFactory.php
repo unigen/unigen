@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace UniGen\Config;
 
 use UniGen\Config\Exception\ConfigException;
-use UniGen\Config\Exception\InvalidConfigSchemaException;
 use UniGen\Util\Exception\FileReaderException;
 use UniGen\Util\FileReader\JsonFileReader;
 
@@ -25,7 +24,6 @@ class ConfigFactory
      * @return Config
      *
      * @throws ConfigException
-     * @throws InvalidConfigSchemaException
      */
     public function createDefault(): Config
     {
@@ -55,7 +53,6 @@ class ConfigFactory
      *
      * @return Config
      *
-     * @throws InvalidConfigSchemaException
      * @throws ConfigException
      */
     public function createFromFile(string $configPath): Config
