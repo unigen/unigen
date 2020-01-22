@@ -54,7 +54,7 @@ class Schema
     {
         $property = $violation['property'];
         if (strlen($property) > 0) {
-            $property = '[' . $property . ']';
+            $property = '"' . $property . '": ';
         }
         $violationMsg = trim(sprintf('%s %s', $property, $violation['message']));
 
