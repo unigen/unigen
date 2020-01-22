@@ -45,6 +45,6 @@ class Config
      */
     public function has(string $key): bool
     {
-        return isset($key, $this->parameters);
+        return isset($this->parameters[$key]);
     }
 }
